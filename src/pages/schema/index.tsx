@@ -11,12 +11,8 @@ const columns = [
     render: (text: string) => <a>{text}</a>,
   },
   {
-    title: '设备名称',
+    title: '模板名称',
     dataIndex: 'name',
-  },
-  {
-    title: '设备配置',
-    dataIndex: 'configuration',
   },
   {
     title: '标签',
@@ -38,10 +34,6 @@ const columns = [
     ),
   },
   {
-    title: '客户',
-    dataIndex: 'user',
-  },
-  {
     title: '',
     dataIndex: '',
     render: (text: string, record: any, index: number) => (
@@ -57,11 +49,11 @@ export default function () {
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
 
   return (
-    <div className="page device container">
+    <div className="page schema container">
       <Card
         title={
           <>
-            <span className="text">设备</span>
+            <span className="text">模板</span>
             <Input value={searchText} onChange={e => setSearchText(e.target.value)} />
           </>
         }
@@ -82,10 +74,8 @@ export default function () {
             {
               id: '000001',
               createOn: '2021',
-              name: 'Xiaomi',
-              configuration: 'S000001',
+              name: 'Mobile Phone',
               tags: ['Great', 'Cheap'],
-              user: ['Perish'],
             },
           ]}
         />

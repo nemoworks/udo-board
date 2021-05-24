@@ -12,6 +12,7 @@ function getHeader(pathname: string) {
     ['user', '客户'],
     ['property', '资产'],
     ['device', '设备'],
+    ['schema', '模板'],
   ]
 
   for (const [path, title] of headers)
@@ -49,6 +50,7 @@ export default function ({ children, location }) {
           </Item>
           <Item icon={<Icon type="icon-property" onClick={() => history.push('/property')} />}>资产</Item>
           <Item icon={<Icon type="icon-device" onClick={() => history.push('/device')} />}>设备</Item>
+          <Item icon={<Icon type="icon-schema" onClick={() => history.push('/schema')} />}>模板</Item>
         </Menu>
       </Sider>
       <Layout>

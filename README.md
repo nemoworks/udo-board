@@ -1,15 +1,20 @@
-# umi project
+# UDO-Board
 
-## Getting Started
+## 项目本地运行
 
-Install dependencies,
-
-```bash
-$ yarn
-```
-
-Start the dev server,
+安装依赖
 
 ```bash
-$ yarn start
+yarn
 ```
+
+启动项目
+
+```bash
+yarn start
+```
+
+## 界面截图
+
+![home](./shots/home.PNG)
+![home](./shots/user.PNG)
