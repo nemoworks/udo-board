@@ -17,6 +17,7 @@
     "**/.prettierignore": true,
     "**/.editorconfig": true,
     "README.md": true,
-    "typings.d.ts": true
+    "typings.d.ts": true,
+    "shots": true
   }
 }

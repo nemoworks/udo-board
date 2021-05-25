@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Card, Table, Tag } from 'antd'
 import { Input } from '@material-ui/core'
-import { Icon } from '@/components'
+import { Icon, Page } from '@/components'
 
 const columns = [
   {
@@ -56,7 +56,7 @@ export default function () {
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
 
   return (
-    <div className="page property container">
+    <Page className="property" title="UDO-Board | 资产管理">
       <Card
         title={
           <>
@@ -89,6 +89,6 @@ export default function () {
           ]}
         />
       </Card>
-    </div>
+    </Page>
   )
 }

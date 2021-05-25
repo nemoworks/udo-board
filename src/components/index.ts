@@ -1,3 +1,4 @@
 import Icon from './Icon'
+import Page from './Page'
 
-export { Icon }
+export { Icon, Page }

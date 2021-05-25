@@ -1,9 +1,10 @@
+import { Page } from '@/components'
 import './index.less'
 
 export default function () {
   return (
-    <div className="page home container">
+    <Page className="home">
       <div className="slogan">Welcome to UDO-Board</div>
-    </div>
+    </Page>
   )
 }

@@ -34,6 +34,7 @@ function getHeader(pathname: string) {
 
 export default function ({ children, location }) {
   const [collapse, setCollapse] = useState(true)
+  const header = getHeader(location.pathname)
 
   return (
     <Layout>
@@ -54,7 +55,7 @@ export default function ({ children, location }) {
         </Menu>
       </Sider>
       <Layout>
-        <Header>{getHeader(location.pathname)}</Header>
+        <Header>{header}</Header>
         <Content>{children}</Content>
       </Layout>
     </Layout>
