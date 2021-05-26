@@ -1,4 +1,24 @@
-let schemas: any[] = []
+import dayjs from 'dayjs'
+
+let schemas: any[] = [
+  {
+    id: 'S000001',
+    name: '手机模板',
+    createOn: dayjs().format(),
+    tags: ['手机'],
+    template: true,
+    content: {
+      type: 'object',
+      title: '设备信息',
+      properties: {
+        name: {
+          type: 'string',
+          title: '设备名称',
+        },
+      },
+    },
+  },
+]
 
 interface API {
   (req: any, res: any): any

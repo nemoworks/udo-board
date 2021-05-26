@@ -16,6 +16,7 @@
     "**/.umirc.ts": true,
     "**/.prettierignore": true,
     "**/.editorconfig": true,
+    "**/.gitkeep": true,
     "README.md": true,
     "typings.d.ts": true,
     "shots": true

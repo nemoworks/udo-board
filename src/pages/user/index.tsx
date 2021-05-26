@@ -1,36 +1,46 @@
-import { useState } from 'react'
-import { Card, Table } from 'antd'
+import { useEffect, useState } from 'react'
+import { history } from 'umi'
+import { Card, Table, Tag, message } from 'antd'
 import { Input } from '@material-ui/core'
+import dayjs from 'dayjs'
 import { Icon, Page } from '@/components'
-
-const columns = [
-  {
-    title: '注册时间',
-    dataIndex: 'createOn',
-    render: (text: string) => <a>{text}</a>,
-  },
-  {
-    title: '姓名',
-    dataIndex: 'name',
-  },
-  {
-    title: '邮箱',
-    dataIndex: 'email',
-  },
-  {
-    title: '',
-    dataIndex: '',
-    render: (text: string, record: any, index: number) => (
-      <>
-        <Icon type="icon-delete" />
-      </>
-    ),
-  },
-]
+import { UserRQ } from '@/requests'
+import { generateColumns } from '@/utils'
 
 export default function () {
   const [searchText, setSearchText] = useState('')
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
+  const [users, setUsers] = useState<any[]>([])
+
+  useEffect(() => {
+    UserRQ.getAll().then(setUsers)
+  }, [])
+
+  const columns = generateColumns([
+    ['创建时间', 'createOn', (text: string) => <a>{dayjs(text).format('YYYY/MM/DD hh:mm:ss')}</a>],
+    ['姓名', 'name'],
+    ['邮箱', 'email'],
+    ['标签', 'tags', (tags: string[]) => tags.map(tag => <Tag key={tag}>{tag}</Tag>)],
+    [
+      '',
+      '',
+      (text: string, record: any, index: number) => (
+        <>
+          <Icon type="icon-edit" onClick={_ => history.push('/user/' + record.id)} />
+          <Icon
+            type="icon-delete"
+            onClick={_ =>
+              UserRQ.delete(record.id).then(_ => {
+                setUsers(users.filter(u => u.id !== record.id))
+                message.success('删除成功', 0.5)
+              })
+            }
+          />
+        </>
+      ),
+      100,
+    ],
+  ])
 
   return (
     <Page className="user" title="UDO-Board | 客户管理">
@@ -54,14 +64,7 @@ export default function () {
           }}
           rowKey="id"
           columns={columns}
-          dataSource={[
-            {
-              id: '000001',
-              createOn: '2021',
-              name: 'Perish',
-              email: 'perishcode@gmail.com',
-            },
-          ]}
+          dataSource={users}
         />
       </Card>
     </Page>

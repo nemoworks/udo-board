@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Card, Tooltip, message } from 'antd'
 import { Input, Switch } from '@material-ui/core'
 import MonacoEditor from 'react-monaco-editor'
-import { Icon, Page } from '@/components'
+import { Icon, Page, XForm } from '@/components'
 import { SchemaRQ } from '@/requests'
 import './index.less'
 
@@ -12,10 +12,27 @@ export default function ({
   },
 }) {
   const [schema, setSchema] = useState({})
-  const [content, setContent] = useState({})
   const [name, setName] = useState('')
   const [tags, setTags] = useState([])
+  const [content, setContent] = useState({})
   const [template, setTemplate] = useState(false)
+
+  const [preview, setPreview] = useState(true)
+  const [editorText, setEditorText] = useState('')
+
+  useEffect(() => {
+    SchemaRQ.get(id).then(schema => {
+      const { content, name, tags, template } = schema
+
+      setName(name)
+      setTags(tags)
+      setContent(content)
+      setTemplate(template)
+      setSchema(schema)
+
+      setEditorText(JSON.stringify(content, null, 4))
+    })
+  }, [])
 
   function updateSchema() {
     SchemaRQ.update({
@@ -24,20 +41,21 @@ export default function ({
       name,
       tags,
       template,
-    }).then(setSchema)
+    }).then(s => {
+      message.success('保存成功', 0.5)
+      setSchema(s)
+    })
   }
 
-  useEffect(() => {
-    SchemaRQ.get(id).then(schema => {
-      const { content, name, tags, template } = schema
-
-      setContent(content)
-      setName(name)
-      setTags(tags)
-      setTemplate(template)
-      setSchema(schema)
-    })
-  }, [])
+  function editorChangeHandler(text: string) {
+    try {
+      const result = JSON.parse(text)
+      setContent(result)
+    } catch (error) {
+    } finally {
+      setEditorText(text)
+    }
+  }
 
   return (
     <Page className="schema single" title="UDO-Board | 模板编辑">
@@ -45,7 +63,10 @@ export default function ({
         title={<Input value={name} onChange={e => setName(e.target.value)} />}
         extra={
           <>
-            <Tooltip overlay="是否作为模板">
+            <Tooltip className="preview" overlay={preview ? '关闭预览' : '开启预览'}>
+              <Icon type={preview ? 'icon-preview-on' : 'icon-preview-off'} onClick={_ => setPreview(!preview)} />
+            </Tooltip>
+            <Tooltip overlay="是否作为创建模板">
               <Switch checked={template} onChange={e => setTemplate(e.target.checked)} color="primary" />
             </Tooltip>
             <Tooltip overlay="保存">
@@ -54,7 +75,23 @@ export default function ({
           </>
         }
       >
-        <MonacoEditor width="100%" height="100%" language="json" theme="vs-light" />
+        {preview ? (
+          <XForm schema={content} />
+        ) : (
+          <MonacoEditor
+            width="100%"
+            height="100%"
+            language="json"
+            theme="vs-light"
+            value={editorText}
+            onChange={editorChangeHandler}
+            options={{
+              minimap: {
+                showSlider: 'mouseover',
+              },
+            }}
+          />
+        )}
       </Card>
     </Page>
   )

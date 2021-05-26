@@ -1,4 +1,5 @@
 import SchemaRQ from './schema'
-import UdoRQ from './udo'
+import DeviceRQ from './device'
+import UserRQ from './user'
 
-export { SchemaRQ, UdoRQ }
+export { SchemaRQ, DeviceRQ, UserRQ }
