@@ -53,7 +53,15 @@ export default function () {
         }
         extra={
           <>
-            <Icon type="icon-create" />
+            <Icon
+              type="icon-create"
+              onClick={_ =>
+                UserRQ.create().then(u => {
+                  message.success('创建成功', 0.5)
+                  history.push('/user/' + u.id)
+                })
+              }
+            />
           </>
         }
       >

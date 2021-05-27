@@ -12,11 +12,12 @@ export default {
     return data
   },
 
-  async create(content: any, schema: string, name = '未命名设备', tags = []) {
+  async create(content: any, schema: string, user = null, name = '未命名设备', tags = []) {
     const { data } = await axios.post('/mock/device', {
       content,
       tags,
       name,
+      user,
       schema,
       createOn: dayjs().format(),
     })

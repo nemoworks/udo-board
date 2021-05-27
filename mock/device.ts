@@ -4,6 +4,7 @@ let devices: any[] = [
   {
     id: 'D000001',
     name: 'Perish 的手机',
+    user: 'U000001',
     createOn: dayjs().format(),
     tags: ['手机'],
     schema: 'S000001',

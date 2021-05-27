@@ -13,6 +13,13 @@ const Mini = {
   transpile: transpilers.Mini,
 }
 
-export default function ({ schema, formData = null, onChange = () => {}, className = '' }) {
+interface Props {
+  schema: any
+  formData?: any
+  onChange?: Function
+  className?: string
+}
+
+export default function ({ schema, formData = null, onChange = () => {}, className = '' }: Props) {
   return <XForm schema={schema} formData={formData} onChange={onChange} className={className} extensions={Default} />
 }
