@@ -49,9 +49,9 @@ export default function ({ children, location }) {
           <Item icon={<Icon type="icon-user" />} onClick={() => history.push('/user')}>
             客户
           </Item>
-          <Item icon={<Icon type="icon-property" onClick={() => history.push('/property')} />}>资产</Item>
-          <Item icon={<Icon type="icon-device" onClick={() => history.push('/device')} />}>设备</Item>
-          <Item icon={<Icon type="icon-schema" onClick={() => history.push('/schema')} />}>模板</Item>
+          <Item icon={<Icon type="icon-property"/>} onClick={() => history.push('/property')}>资产</Item>
+          <Item icon={<Icon type="icon-device"/>} onClick={() => history.push('/device')}>设备</Item>
+          <Item icon={<Icon type="icon-schema"/>} onClick={() => history.push('/schema')}>模板</Item>
         </Menu>
       </Sider>
       <Layout>
