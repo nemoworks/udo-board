@@ -18,6 +18,5 @@
 /src/.umi-production
 /src/.umi-test
 /.env.local
-.umirc.ts
 
 
