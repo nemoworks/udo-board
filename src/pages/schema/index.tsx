@@ -47,20 +47,20 @@ export default function () {
     <Menu>
       <Item onClick={createFromEmpty}>空白模板</Item>
       {schemas
-        .filter(s => s.template)
+        // .filter(s => s.template)
         .map(s => (
           <Item key={s.id} onClick={_ => createFromTemplate(s)}>
-            {s.name}
+            {s.id}模版
           </Item>
         ))}
     </Menu>
   )
 
   const columns = generateColumns([
-    ['创建时间', 'createOn', (text: string) => <a>{dayjs(text).format('YYYY/MM/DD hh:mm:ss')}</a>],
-    ['模板名称', 'name'],
-    ['标签', 'tags', (tags: string[]) => tags.map(tag => <Tag key={tag}>{tag}</Tag>)],
-    ['模板', 'template', (template: boolean) => (template ? '√' : '×')],
+    ['创建时间', 'createOn', () => <a>{dayjs().format('YYYY/MM/DD hh:mm:ss')}</a>], //(text: string) => <a>{dayjs(text).format('YYYY/MM/DD hh:mm:ss')}</a>],
+    ['模板名称', 'name', (text: string, record: any, index: number) => <span>{record.id}</span>],
+    ['标签', 'tags', (tags: string[] = ['tag1']) => tags.map(tag => <Tag key={tag}>{tag}</Tag>)], //(tags: string[]) => tags.map(tag => <Tag key={tag}>{tag}</Tag>)],
+    ['模板', 'template', () => '√'], //(template: boolean) => (template ? '√' : '×')],
     [
       '',
       '',
@@ -73,6 +73,7 @@ export default function () {
       100,
     ],
   ])
+  // console.log(columns)
 
   return (
     <Page className="schema" title="UDO-Board | 模板管理">

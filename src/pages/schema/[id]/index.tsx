@@ -22,8 +22,12 @@ export default function ({
 
   useEffect(() => {
     SchemaRQ.get(id).then(schema => {
-      const { content, name, tags, template } = schema
-
+      let { schema: content } = schema
+      // console.log('content',content)
+      content = content ? content : {}
+      const name = id
+      const tags: any = ['tag1']
+      const template = true
       setName(name)
       setTags(tags)
       setContent(content)
@@ -35,13 +39,13 @@ export default function ({
   }, [])
 
   function updateSchema() {
-    SchemaRQ.update({
-      ...schema,
-      content,
-      name,
-      tags,
-      template,
-    }).then(s => {
+    SchemaRQ.update(
+      {
+        ...schema,
+        content,
+      },
+      id
+    ).then(s => {
       message.success('保存成功', 0.5)
       setSchema(s)
     })

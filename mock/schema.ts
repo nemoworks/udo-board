@@ -3,10 +3,10 @@ import dayjs from 'dayjs'
 let schemas: any[] = [
   {
     id: 'S000001',
-    name: '手机模板',
-    createOn: dayjs().format(),
-    tags: ['手机'],
-    template: true,
+    // name: '手机模板',
+    // createOn: dayjs().format(),
+    // tags: ['手机'],
+    // template: true,
     content: {
       type: 'object',
       title: '设备信息',
@@ -38,26 +38,26 @@ function initializeSchema(source: any) {
 }
 
 export default {
-  'GET /mock/schema': (req, res) => {
+  'GET /schemas': (req, res) => {
     res.send(schemas)
   },
 
-  'GET /mock/schema/:id': ({ params: { id } }, res) => {
+  'GET /schemas/:id': ({ params: { id } }, res) => {
     res.send(schemas.find(s => s.id === id))
   },
 
-  'POST /mock/schema': ({ body }, res) => {
+  'POST /schemas': ({ body }, res) => {
     const schema = initializeSchema(body)
     schemas.push(schema)
     res.send(schema)
   },
 
-  'PUT /mock/schema': ({ body }, res) => {
-    schemas = schemas.map(s => (s.id === body.id ? body : s))
+  'PUT /schemas/:id': ({ body, params: { id } }, res) => {
+    schemas = schemas.map(s => (s.id === id ? body : s))
     res.send(body)
   },
 
-  'DELETE /mock/schema/:id': ({ params: { id }, res }) => {
+  'DELETE /schemas/:id': ({ params: { id }, res }) => {
     schemas = schemas.filter(s => s.id !== id)
     res.send({
       status: 'success',

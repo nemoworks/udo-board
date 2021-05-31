@@ -2,10 +2,10 @@ type ColumnDifinition = [string, string, Function, number] | [string, string, Fu
 
 function generateColumns(source: ColumnDifinition[]): any {
   return source.map(([title, dataIndex, render, width]) => ({
-    title,
-    dataIndex,
-    render,
-    width,
+    title: title,
+    dataIndex: dataIndex,
+    render: render,
+    width: width,
   }))
 }
 

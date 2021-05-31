@@ -19,7 +19,7 @@ export default function ({
   const [users, setUsers] = useState<any[]>([])
 
   function updateDevice() {
-    console.log(user)
+    // console.log(user)
 
     DeviceRQ.update({
       ...device,
@@ -54,7 +54,7 @@ export default function ({
         title={<Input value={name} onChange={e => setName(e.target.value)} />}
         extra={
           <>
-            <Select value={user ?? undefined} onChange={u => setUser(u)}>
+            <Select value={user ? user : 'undefined'} onChange={u => setUser(u)}>
               {users.map(u => (
                 <Option key={u.id} value={u.id}>
                   {u.name}

@@ -18,11 +18,11 @@ export default function () {
   const [devices, setDevices] = useState<any[]>([])
 
   useEffect(() => {
-    DeviceRQ.getAll().then(setDevices)
+    // DeviceRQ.getAll().then(setDevices)
     SchemaRQ.getAll().then(setSchemas)
   }, [])
 
-  console.log(devices)
+  //console.log(devices)
 
   function deleteById(id) {
     DeviceRQ.delete(id).then(_ => {
@@ -32,17 +32,18 @@ export default function () {
   }
 
   function createFromSchema(schema: any) {
-    DeviceRQ.create(null, schema.id).then(d => {
+    const { title } = schema
+    DeviceRQ.create(schema).then(({ udoi }) => {
       message.success('创建成功', 0.5)
-      history.push('/device/' + d.id)
+      history.push('/device/' + udoi + '?title=' + title)
     })
   }
 
   const columns = generateColumns([
-    ['创建时间', 'createOn', (text: string) => <span>{dayjs(text).format('YYYY/MM/DD hh:mm:ss')}</span>],
-    ['设备名称', 'name'],
-    ['用户', 'user', (id: string | null) => (id ? <a href={'/user/' + id}>{id}</a> : '未指定')],
-    ['标签', 'tags', (tags: string[]) => tags.map(tag => <Tag key={tag}>{tag}</Tag>)],
+    ['创建时间', 'createOn', () => <span>{dayjs().format('YYYY/MM/DD hh:mm:ss')}</span>],
+    ['设备名称', 'name', (text: string, record: any, index: number) => <span>{record.id}</span>],
+    ['用户', 'user', (id: string) => (id ? <a href={'/user/' + id}>{id}</a> : <span>未指定</span>)],
+    ['标签', 'tags', (tags: string[] = ['tag1']) => tags.map(tag => <Tag key={tag}>{tag}</Tag>)],
     [
       '',
       '',
@@ -69,11 +70,13 @@ export default function () {
           <Dropdown
             overlay={
               <Menu>
-                {schemas.map(s => (
-                  <Item key={s.id} onClick={_ => createFromSchema(s)}>
-                    {s.name}
-                  </Item>
-                ))}
+                {schemas
+                  // .filter(s=>s.template)
+                  .map(s => (
+                    <Item key={s.id} onClick={_ => createFromSchema(s)}>
+                      {s.id}
+                    </Item>
+                  ))}
               </Menu>
             }
             trigger={['click']}
