@@ -2,7 +2,40 @@ import axios from 'axios'
 import dayjs from 'dayjs'
 
 export default {
-  async getAll(schemas: any) {},
+  async getAll(schemas: any[]) {
+    let data: any[] = []
+    for (let schema of schemas) {
+      const {
+        schema: { title, properties },
+        id,
+      } = schema
+      let response: string = ''
+      for (var key in properties) {
+        response = response + key + '\n'
+      }
+      const query =
+        `
+      {
+        ${title}documents:{
+          udoi
+          ` +
+        response +
+        `}
+      }
+      `
+      console.log(query)
+      const { data: res } = await axios.post(host + '/api/documents/query', query, {
+        headers: {
+          'Content-Type': 'text/plain',
+        },
+      })
+      for (var i of res) {
+        data.push(i)
+      }
+    }
+    console.log(data)
+    return data
+  },
 
   async create(schema: any) {
     const {
@@ -58,14 +91,11 @@ export default {
     `
 
     console.log(query)
-
-    const { data: res } = await axios.post('/api/documents/query', query, {
+    const { data } = await axios.post(host + '/api/documents/query', query, {
       headers: {
         'Content-Type': 'text/plain',
       },
     })
-
-    const data = res['new' + title]
     console.log(data)
     return data
   },
