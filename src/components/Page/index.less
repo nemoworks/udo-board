@@ -3,6 +3,20 @@
   position: relative;
 
   .ant-card {
+    position: relative;
+    height: 100%;
+
+    .ant-card-extra {
+      & > .anticon {
+        margin: 0px 3px;
+        font-size: 20px;
+      }
+
+      & > div {
+        margin: 0px 5px;
+      }
+    }
+
     .ant-card-head-title {
       .text {
         display: inline-block;
@@ -17,27 +31,37 @@
       }
     }
 
+    .ant-card-body {
+      overflow: auto;
+      height: calc(100% - 65px);
+
+      /* 滚动条 */
+      &::-webkit-scrollbar {
+        width: 6px; /*滚动条的宽度*/
+      }
+      &::-webkit-scrollbar-thumb:vertical {
+        /*垂直滚动条的样式*/
+        background-color: rgba(153, 153, 153, 0.144);
+        border-radius: 3px;
+      }
+      &::-webkit-scrollbar-thumb:hover {
+        /*滚动条的hover样式*/
+        background-color: #0a0a0a94;
+        border-radius: 3px;
+      }
+    }
+
     .ant-table-thead > tr > th {
       font-weight: 800;
 
       background-color: rgba(48, 86, 128, 0.8);
       color: white;
     }
-  }
 
-  .ant-card-extra {
-    & > .anticon {
-      margin: 0px 3px;
-      font-size: 20px;
-    }
-
-    & > div {
-      margin: 0px 5px;
-    }
-  }
-  .ant-table-cell {
-    .anticon {
-      margin: 0px 3px;
+    .ant-table-cell {
+      .anticon {
+        margin: 0px 3px;
+      }
     }
   }
 

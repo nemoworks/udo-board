@@ -7,34 +7,31 @@ import './index.less'
 const { Sider, Header, Content } = Layout
 const { Item } = Menu
 
-function getHeader(pathname: string) {
-  const headers = [
-    ['user', '客户'],
-    ['property', '资产'],
-    ['device', '设备'],
-    ['schema', '模板'],
-  ]
-
-  for (const [path, title] of headers)
-    if (pathname.startsWith('/' + path))
-      return (
-        <>
-          <Icon type={'icon-' + path} />
-          <span className="text">{title}</span>
-        </>
-      )
-
-  return (
-    <>
-      <Icon type="icon-home" />
-      <span className="text">主页</span>
-    </>
-  )
+const pathMap = {
+  '': '主页',
+  user: '客户',
+  property: '资产',
+  device: '设备',
+  schema: '模板',
+  application: '场景',
 }
 
 export default function ({ children, location }) {
   const [collapse, setCollapse] = useState(true)
-  const header = getHeader(location.pathname)
+
+  const path = Object.keys(pathMap).find(key => key !== '' && location.pathname.startsWith('/' + key))
+
+  const items = Object.keys(pathMap).map(path => {
+    return (
+      <Item
+        key={path}
+        icon={<Icon type={'icon-' + (path === '' ? 'home' : path)} />}
+        onClick={() => history.push('/' + path)}
+      >
+        {pathMap[path]}
+      </Item>
+    )
+  })
 
   return (
     <Layout>
@@ -43,19 +40,14 @@ export default function ({ children, location }) {
           <Item className="logo" icon={<Icon type="icon-cloud" />} onClick={() => setCollapse(!collapse)} title={null}>
             UDO-Board
           </Item>
-          <Item icon={<Icon type="icon-home" />} onClick={() => history.push('/')}>
-            主页
-          </Item>
-          <Item icon={<Icon type="icon-user" />} onClick={() => history.push('/user')}>
-            客户
-          </Item>
-          <Item icon={<Icon type="icon-property"/>} onClick={() => history.push('/property')}>资产</Item>
-          <Item icon={<Icon type="icon-device"/>} onClick={() => history.push('/device')}>设备</Item>
-          <Item icon={<Icon type="icon-schema"/>} onClick={() => history.push('/schema')}>模板</Item>
+          {items}
         </Menu>
       </Sider>
       <Layout>
-        <Header>{header}</Header>
+        <Header>
+          <Icon type={'icon-' + (path ?? 'home')} />
+          <span className="text">{pathMap[path ?? '']}</span>
+        </Header>
         <Content>{children}</Content>
       </Layout>
     </Layout>

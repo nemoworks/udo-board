@@ -1,34 +1,18 @@
-import { ContactsOutlined } from '@ant-design/icons'
 import axios from 'axios'
 import dayjs from 'dayjs'
 
-const host = 'http://192.168.1.105:8080'
-// const host=''
-
 export default {
-  async getAll(schemas: any) {
-    const {
-      schema: { title, properties },
-      id,
-    } = schema
-    let response: string = ''
-    for (var key in properties) {
-      response = response + key + '\n'
-    }
-    const query = `
-    {
-
-    }
-    `
-  },
+  async getAll(schemas: any) {},
 
   async create(schema: any) {
     const {
       schema: { title, properties },
       id,
     } = schema
+
     let schemaContent: string = ''
     let response: string = ''
+
     for (var key in properties) {
       schemaContent = schemaContent + key + ': null\n'
       response = response + key + '\n'
@@ -47,41 +31,40 @@ export default {
     }`
 
     console.log(query)
-    const { data: res } = await axios.post(host + '/api/documents/query', query, {
+
+    const { data: res } = await axios.post('/api/documents/query', query, {
       headers: {
         'Content-Type': 'text/plain',
       },
     })
+
     const data = res['new' + title]
-    // for (let key in res)
-    // {
-    //   data=res[key]
-    // }
+
     console.log(data)
     return data
   },
 
   async get(id: string, schema: any) {
     const { title, properties } = schema
-    let response: string = ''
-    for (var key in properties) {
-      response = response + key + '\n'
-    }
-    const query =
-      `
-    {
-      ${title}(udoi:"${id}"){
-    ` +
-      response +
-      `}
-    }
+
+    const response = Object.keys(properties).join('\n')
+
+    const query = `
+      {
+        ${title}(udoi:"${id}"){
+          ${response}
+        }
+      }
     `
+
     console.log(query)
-    const { data: res } = await axios.post(host + '/api/documents/query', query, {
+
+    const { data: res } = await axios.post('/api/documents/query', query, {
       headers: {
         'Content-Type': 'text/plain',
       },
     })
+
     const data = res['new' + title]
     console.log(data)
     return data
@@ -89,50 +72,55 @@ export default {
 
   async update(device: any, id: string, schemaId: string, schema: any) {
     const { title, properties } = schema
-    let response: string = ''
-    for (var key in properties) {
-      response = response + key + '\n'
-    }
-    const query =
-      `
-    {
-      update${title}(
-        udoi:${id}
-        content: ` +
-      JSON.stringify(device).replace(',', '') +
-      `
-        udoTypeId: "${schemaId}"
-        uri : "http://localhost:8081/"
-      ){` +
-      response +
-      `}
-    }
+
+    const response = Object.keys(properties).join('\n')
+    const request = JSON.stringify(device).replace(',', '')
+
+    const query = `
+      {
+        update${title}(
+          udoi:${id}
+          content: ${request}
+          udoTypeId: "${schemaId}"
+          uri : "http://localhost:8081/"
+        ){
+          ${response}
+        }
+      }
     `
+
     console.log(query)
-    const { data } = await axios.post(host + '/api/documents/query', query, {
+
+    const { data } = await axios.post('/api/documents/query', query, {
       headers: {
         'Content-Type': 'text/plain',
       },
     })
+
     console.log(data)
+
     return data
   },
 
   async delete(id: string) {
     const query = `
-    {
-      deleteTest(udoi:${id}){
-        udoi
+      {
+        deleteTest(udoi:${id}){
+          udoi
+        }
       }
-    }
     `
+
     console.log(query)
-    const { data } = await axios.post(host + '/api/documents/query', query, {
+
+    const { data } = await axios.post('/api/documents/query', query, {
       headers: {
         'Content-Type': 'text/plain',
       },
     })
+
     console.log(data)
+
     return data
   },
 }
