@@ -32,10 +32,9 @@ export default function () {
   }
 
   function createFromSchema(schema: any) {
-    const { title } = schema
     DeviceRQ.create(schema).then(({ udoi }) => {
       message.success('创建成功', 0.5)
-      history.push('/device/' + udoi + '?title=' + title)
+      history.push('/device/' + udoi)
     })
   }
 
