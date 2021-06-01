@@ -20,6 +20,7 @@ export default function () {
   useEffect(() => {
     // DeviceRQ.getAll().then(setDevices)
     SchemaRQ.getAll().then(setSchemas)
+    DeviceRQ.getAll(schemas).then(setDevices)
   }, [])
 
   //console.log(devices)
@@ -40,9 +41,9 @@ export default function () {
 
   const columns = generateColumns([
     ['创建时间', 'createOn', () => <span>{dayjs().format('YYYY/MM/DD hh:mm:ss')}</span>],
-    ['设备名称', 'name', (text: string, record: any, index: number) => <span>{record.id}</span>],
-    ['用户', 'user', (id: string) => (id ? <a href={'/user/' + id}>{id}</a> : <span>未指定</span>)],
-    ['标签', 'tags', (tags: string[] = ['tag1']) => tags.map(tag => <Tag key={tag}>{tag}</Tag>)],
+    ['设备名称', 'name', (text: string, record: any, index: number) => <span>{record.udoi}</span>],
+    ['用户', 'user', (id: string = 'user') => (id ? <a href={'/user/' + id}>{id}</a> : <span>未指定</span>)],
+    ['标签', 'tags', (tags: string[] = ['tag']) => tags.map(tag => <Tag key={tag}>{tag}</Tag>)],
     [
       '',
       '',
