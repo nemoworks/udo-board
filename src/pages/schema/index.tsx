@@ -27,7 +27,12 @@ export default function () {
     })
   }
 
-  function createFromUrl() {}
+  function createFromUrl() {
+    SchemaRQ.createFromUrl(sourceUrl).then(({ schema: { id } }) => {
+      message.success('导入成功', 0.5)
+      history.push('/schema/' + id)
+    })
+  }
 
   function createFromTemplate({ content, name, tags, template }) {
     SchemaRQ.create(content, name + '-未命名副本', tags, template).then(({ id }) => {
@@ -88,7 +93,7 @@ export default function () {
           <>
             <Input value={sourceUrl} onChange={e => setSourceUrl(e.target.value)} />
             <Tooltip overlay="从 URL 导入">
-              <Icon type="icon-import" />
+              <Icon type="icon-import" onClick={() => createFromUrl()} />
             </Tooltip>
             <Dropdown overlay={overlay} trigger={['click']}>
               <Icon type="icon-template" />

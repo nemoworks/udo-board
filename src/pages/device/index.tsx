@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { history } from 'umi'
-import { Card, Table, Tag, Dropdown, Menu, message } from 'antd'
+import { Card, Table, Tag, Dropdown, Menu, message, Tooltip } from 'antd'
 import { Input } from '@material-ui/core'
 import dayjs from 'dayjs'
 import { Icon, Page } from '@/components'
@@ -17,6 +17,8 @@ export default function () {
   const [schemas, setSchemas] = useState<any[]>([])
   const [devices, setDevices] = useState<any[]>([])
 
+  const [sourceUrl, setSourceUrl] = useState('')
+
   useEffect(() => {
     // DeviceRQ.getAll().then(setDevices)
     SchemaRQ.getAll().then(setSchemas)
@@ -32,10 +34,18 @@ export default function () {
     })
   }
 
+  function createFromUrl() {
+    SchemaRQ.createFromUrl(sourceUrl).then(({ udoi, schema: { id } }) => {
+      message.success('导入成功', 0.5)
+      history.push('/schema/' + id + '/' + udoi)
+    })
+  }
+
   function createFromSchema(schema: any) {
+    const { id: schemaId } = schema
     DeviceRQ.create(schema).then(({ udoi }) => {
       message.success('创建成功', 0.5)
-      history.push('/device/' + udoi)
+      history.push('/device/' + schemaId + '/' + udoi)
     })
   }
 
@@ -67,22 +77,28 @@ export default function () {
           </>
         }
         extra={
-          <Dropdown
-            overlay={
-              <Menu>
-                {schemas
-                  // .filter(s=>s.template)
-                  .map(s => (
-                    <Item key={s.id} onClick={_ => createFromSchema(s)}>
-                      {s.id}
-                    </Item>
-                  ))}
-              </Menu>
-            }
-            trigger={['click']}
-          >
-            <Icon type="icon-create" />
-          </Dropdown>
+          <>
+            <Input value={sourceUrl} onChange={e => setSourceUrl(e.target.value)} />
+            <Tooltip overlay="从 URL 导入">
+              <Icon type="icon-import" onClick={() => createFromUrl()} />
+            </Tooltip>
+            <Dropdown
+              overlay={
+                <Menu>
+                  {schemas
+                    // .filter(s=>s.template)
+                    .map(s => (
+                      <Item key={s.id} onClick={_ => createFromSchema(s)}>
+                        {s.id}
+                      </Item>
+                    ))}
+                </Menu>
+              }
+              trigger={['click']}
+            >
+              <Icon type="icon-create" />
+            </Dropdown>
+          </>
         }
       >
         <Table

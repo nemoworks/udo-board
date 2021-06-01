@@ -17,6 +17,11 @@ export default {
     return data
   },
 
+  async createFromUrl(url: string) {
+    const { data } = await axios.post(host + '/api/??????', url)
+    return data
+  },
+
   async create(content: any, name = '未命名模板', tags = ['tag1'], template = true) {
     const { data } = await axios.post(host + '/api/schemas', {
       content,
