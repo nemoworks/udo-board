@@ -9,28 +9,22 @@ export default {
         schema: { title, properties },
         id,
       } = schema
-      let response: string = ''
-      for (var key in properties) {
-        response = response + key + '\n'
-      }
-      const query =
-        `
+      const response = Object.keys(properties).join('\n')
+      const query = `
       {
         ${title}documents:{
           udoi
-          ` +
-        response +
-        `}
-      }
-      `
+          ${response}
+        }
+      }`
       console.log(query)
-      const { data: res } = await axios.post(host + '/api/documents/query', query, {
+      const { data: res } = await axios.post('/api/documents/query', query, {
         headers: {
           'Content-Type': 'text/plain',
         },
       })
-      for (var i of res) {
-        data.push(i)
+      for (let i of res) {
+        data.push({ ...i, schema })
       }
     }
     console.log(data)
@@ -42,14 +36,6 @@ export default {
       schema: { title, properties },
       id,
     } = schema
-
-    let schemaContent: string = ''
-    let response: string = ''
-
-    for (var key in properties) {
-      schemaContent = schemaContent + key + ': null\n'
-      response = response + key + '\n'
-    }
 
     const query = `
     {
@@ -70,10 +56,8 @@ export default {
         'Content-Type': 'text/plain',
       },
     })
-
+    console.log(res)
     const data = res['new' + title]
-
-    console.log(data)
     return data
   },
 
@@ -91,7 +75,7 @@ export default {
     `
 
     console.log(query)
-    const { data } = await axios.post(host + '/api/documents/query', query, {
+    const { data } = await axios.post('/api/documents/query', query, {
       headers: {
         'Content-Type': 'text/plain',
       },
@@ -100,11 +84,11 @@ export default {
     return data
   },
 
-  async update(device: any, id: string, schemaId: string, schema: any) {
+  async update(content: any, id: string, schemaId: string, schema: any) {
     const { title, properties } = schema
 
     const response = Object.keys(properties).join('\n')
-    const request = JSON.stringify(device).replace(',', '')
+    const request = JSON.stringify(content).replace(',', '')
 
     const query = `
       {
@@ -132,10 +116,16 @@ export default {
     return data
   },
 
-  async delete(id: string) {
+  async delete(device: any) {
+    const {
+      udoi,
+      schema: {
+        schema: { title },
+      },
+    } = device
     const query = `
       {
-        deleteTest(udoi:${id}){
+        delete${title}(udoi:"${udoi}"){
           udoi
         }
       }

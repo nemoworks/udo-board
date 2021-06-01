@@ -21,16 +21,20 @@ export default function () {
 
   useEffect(() => {
     // DeviceRQ.getAll().then(setDevices)
-    SchemaRQ.getAll().then(setSchemas)
-    DeviceRQ.getAll(schemas).then(setDevices)
+    SchemaRQ.getAll().then(s => {
+      DeviceRQ.getAll(s).then(d => {
+        setDevices(d)
+        setSchemas(s)
+      })
+    })
   }, [])
 
   //console.log(devices)
 
-  function deleteById(id) {
-    DeviceRQ.delete(id).then(_ => {
+  function deleteById(record: any) {
+    DeviceRQ.delete(record).then(_ => {
       message.success('删除成功', 0.5)
-      setDevices(devices.filter(s => s.id !== id))
+      setDevices(devices.filter(d => d.udoi !== record.udoi))
     })
   }
 
@@ -59,8 +63,8 @@ export default function () {
       '',
       (text: string, record: any, index: number) => (
         <>
-          <Icon type="icon-edit" onClick={_ => history.push('/device/' + record.id)} />
-          <Icon type="icon-delete" onClick={_ => deleteById(record.id)} />
+          <Icon type="icon-edit" onClick={_ => history.push('/device/' + record.schema.id + '/' + record.udoi)} />
+          <Icon type="icon-delete" onClick={_ => deleteById(record)} />
         </>
       ),
       100,

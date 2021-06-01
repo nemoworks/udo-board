@@ -30,7 +30,7 @@ export default function ({
     UserRQ.getAll().then(setUsers)
 
     SchemaRQ.get(schemaId).then(schema => {
-      let { schema: schemaContent } = schema
+      const { schema: schemaContent } = schema
       DeviceRQ.get(id, schemaContent).then(device => {
         setName(id)
         setDevice(device)
