@@ -29,13 +29,13 @@ export default function ({
   useEffect(() => {
     UserRQ.getAll().then(setUsers)
 
-    SchemaRQ.get(schemaId).then(schema => {
-      const { schema: schemaContent } = schema
-      DeviceRQ.get(id, schemaContent).then(device => {
+    SchemaRQ.get(schemaId).then(s => {
+      const { schema: schemaContent } = s
+      DeviceRQ.get(id, schemaContent).then(d => {
         setName(id)
-        setDevice(device)
+        setDevice(d)
         setSchema(schemaContent)
-        setContent(device)
+        setContent(d)
       })
     })
     // DeviceRQ.get(id).then(device => {

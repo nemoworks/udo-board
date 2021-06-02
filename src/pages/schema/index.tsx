@@ -28,7 +28,7 @@ export default function () {
   }
 
   function createFromUrl() {
-    SchemaRQ.createFromUrl(sourceUrl).then(({ schema: { id } }) => {
+    SchemaRQ.createFromUrl(sourceUrl).then(({ type: { id } }) => {
       message.success('导入成功', 0.5)
       history.push('/schema/' + id)
     })
@@ -63,7 +63,7 @@ export default function () {
 
   const columns = generateColumns([
     ['创建时间', 'createOn', () => <a>{dayjs().format('YYYY/MM/DD hh:mm:ss')}</a>], //(text: string) => <a>{dayjs(text).format('YYYY/MM/DD hh:mm:ss')}</a>],
-    ['模板名称', 'name', (text: string, record: any, index: number) => <span>{record.id}</span>],
+    ['模板名称', 'name', (text: string, record: any, index: number) => <span>{record.schema.title}</span>],
     ['标签', 'tags', (tags: string[] = ['tag1']) => tags.map(tag => <Tag key={tag}>{tag}</Tag>)], //(tags: string[]) => tags.map(tag => <Tag key={tag}>{tag}</Tag>)],
     ['模板', 'template', () => '√'], //(template: boolean) => (template ? '√' : '×')],
     [
