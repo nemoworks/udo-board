@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Card, Tooltip, message, Modal, Button } from 'antd'
 import { Input } from '@material-ui/core'
 import { Page, Icon, DeviceCard, DeviceSelection } from '@/components'
-import { ApplicationRQ } from '@/requests'
+import { ApplicationRQ, DeviceRQ } from '@/requests'
 import './index.less'
 
 export default function ({

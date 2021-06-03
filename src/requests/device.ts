@@ -2,36 +2,42 @@ import axios from 'axios'
 import dayjs from 'dayjs'
 
 export default {
-  async getAll(schemas: any[]) {
-    let data: any[] = []
-    for (let schema of schemas) {
-      const {
-        schema: { title, properties },
-        id,
-      } = schema
-      const response = Object.keys(properties).join('\n')
-      const query = `
-      {
-        ${title}Documents(
-          udoTypeId: "${id}"
-        ){
-          udoi
-          ${response}
-        }
-      }`
-      console.log(query)
-      const { data: res } = await axios.post('/api/documents/query', query, {
-        headers: {
-          'Content-Type': 'text/plain',
-        },
-      })
-      console.log(res)
-      const r = res[title + 'Documents']
-      for (let i of r) {
-        data.push({ ...i, schema })
-      }
-    }
-    console.log(data)
+  async getAll(schemas: any[] = []) {
+    // let data: any[] = []
+
+    // for (let schema of schemas) {
+    //   const {
+    //     schema: { title, properties },
+    //     id,
+    //   } = schema
+    //   const response = Object.keys(properties).join('\n')
+
+    //   const query = `
+    //   {
+    //     ${title}Documents(
+    //       udoTypeId: "${id}"
+    //     ){
+    //       udoi
+    //       ${response}
+    //     }
+    //   }`
+    //   console.log(query)
+    //   const { data: res } = await axios.post('/api/documents/query', query, {
+    //     headers: {
+    //       'Content-Type': 'text/plain',
+    //     },
+    //   })
+    //   console.log(res)
+    //   const r = res[title + 'Documents']
+    //   for (let i of r) {
+    //     data.push({ ...i, schema })
+    //   }
+    // }
+    // console.log(data)
+    // return data
+
+    const { data } = await axios.get('/api/documents')
+
     return data
   },
 
@@ -42,16 +48,17 @@ export default {
     } = schema
 
     const query = `
-    {
-      new${title}(
-        content: {
+      {
+        new${title}(
+          content: {
+          }
+          udoTypeId: "${id}"
+          uri : "http://localhost:8081/"
+        ){
+          udoi
         }
-        udoTypeId: "${id}"
-        uri : "http://localhost:8081/"
-      ){
-        udoi
       }
-    }`
+    `
 
     console.log(query)
 
