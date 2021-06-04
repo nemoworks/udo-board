@@ -1,6 +1,8 @@
 import axios from 'axios'
 import dayjs from 'dayjs'
 
+const host = 'http://192.168.31.222:8080'
+
 export default {
   async getAll(schemas: any[]) {
     let data: any[] = []
@@ -20,7 +22,7 @@ export default {
         }
       }`
       console.log(query)
-      const { data: res } = await axios.post('/api/documents/query', query, {
+      const { data: res } = await axios.post(host + '/api/documents/query', query, {
         headers: {
           'Content-Type': 'text/plain',
         },
@@ -55,7 +57,7 @@ export default {
 
     console.log(query)
 
-    const { data: res } = await axios.post('/api/documents/query', query, {
+    const { data: res } = await axios.post(host + '/api/documents/query', query, {
       headers: {
         'Content-Type': 'text/plain',
       },
@@ -79,7 +81,7 @@ export default {
     `
 
     console.log(query)
-    const { data: res } = await axios.post('/api/documents/query', query, {
+    const { data: res } = await axios.post(host + '/api/documents/query', query, {
       headers: {
         'Content-Type': 'text/plain',
       },
@@ -112,7 +114,7 @@ export default {
 
     console.log(query)
 
-    const { data: res } = await axios.post('/api/documents/query', query, {
+    const { data: res } = await axios.post(host + '/api/documents/query', query, {
       headers: {
         'Content-Type': 'text/plain',
       },
@@ -139,7 +141,7 @@ export default {
 
     console.log(query)
 
-    const { data } = await axios.post('/api/documents/query', query, {
+    const { data } = await axios.post(host + '/api/documents/query', query, {
       headers: {
         'Content-Type': 'text/plain',
       },
