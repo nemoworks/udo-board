@@ -1,8 +1,6 @@
 import axios from 'axios'
 import dayjs from 'dayjs'
 
-const host = 'http://192.168.31.222:8080'
-
 export default {
   async getAll(schemas: any[]) {
     let data: any[] = []
@@ -21,19 +19,19 @@ export default {
           ${response}
         }
       }`
-      console.log(query)
-      const { data: res } = await axios.post(host + '/api/documents/query', query, {
+
+      const { data: res } = await axios.post('/api/documents/query', query, {
         headers: {
           'Content-Type': 'text/plain',
         },
       })
-      console.log(res)
+
       const r = res[title + 'Documents']
       for (let i of r) {
         data.push({ ...i, schema })
       }
     }
-    console.log(data)
+
     return data
   },
 
@@ -44,25 +42,24 @@ export default {
     } = schema
 
     const query = `
-    {
-      new${title}(
-        content: {
+      {
+        new${title}(
+          content: {
+          }
+          udoTypeId: "${id}"
+          uri : "http://localhost:8081/"
+        ){
+          udoi
         }
-        udoTypeId: "${id}"
-        uri : "http://localhost:8081/"
-      ){
-        udoi
       }
-    }`
+    `
 
-    console.log(query)
-
-    const { data: res } = await axios.post(host + '/api/documents/query', query, {
+    const { data: res } = await axios.post('/api/documents/query', query, {
       headers: {
         'Content-Type': 'text/plain',
       },
     })
-    console.log(res)
+
     const data = res['new' + title]
     return data
   },
@@ -80,13 +77,12 @@ export default {
       }
     `
 
-    console.log(query)
-    const { data: res } = await axios.post(host + '/api/documents/query', query, {
+    const { data: res } = await axios.post('/api/documents/query', query, {
       headers: {
         'Content-Type': 'text/plain',
       },
     })
-    console.log(res)
+
     const data = res[title]
     return data
   },
@@ -112,14 +108,12 @@ export default {
       }
     `
 
-    console.log(query)
-
-    const { data: res } = await axios.post(host + '/api/documents/query', query, {
+    const { data: res } = await axios.post('/api/documents/query', query, {
       headers: {
         'Content-Type': 'text/plain',
       },
     })
-    console.log(res)
+
     const data = res[title]
     return data
   },
@@ -139,14 +133,12 @@ export default {
       }
     `
 
-    console.log(query)
-
-    const { data } = await axios.post(host + '/api/documents/query', query, {
+    const { data } = await axios.post('/api/documents/query', query, {
       headers: {
         'Content-Type': 'text/plain',
       },
     })
-    console.log(data)
+
     return data
   },
 }
