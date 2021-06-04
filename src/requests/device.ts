@@ -64,6 +64,12 @@ export default {
     return data
   },
 
+  async getById(id: string) {
+    const { data } = await axios.get('/api/documents/' + id)
+
+    return data
+  },
+
   async get(id: string, schema: any) {
     const { title, properties } = schema
 

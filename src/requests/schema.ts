@@ -14,8 +14,15 @@ export default {
     return data
   },
 
-  async createFromUrl(uri: string) {
-    const { data } = await axios.post('/api/documents?uri=' + uri)
+  async createFromUrl(uri: string, name: string) {
+    const { data } = await axios.request({
+      method: 'POST',
+      url: '/api/documents',
+      params: {
+        uri,
+        name,
+      },
+    })
 
     return data
   },
