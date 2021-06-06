@@ -2,41 +2,35 @@ import axios from 'axios'
 import dayjs from 'dayjs'
 
 export default {
-  async getAll(schemas: any[] = []) {
-    // let data: any[] = []
+  async getAll(schemas: any[]) {
+    let data: any[] = []
+    for (let schema of schemas) {
+      const {
+        schema: { title, properties },
+        id,
+      } = schema
+      const response = Object.keys(properties).join('\n')
+      const query = `
+      {
+        ${title}Documents(
+          udoTypeId: "${id}"
+        ){
+          udoi
+          ${response}
+        }
+      }`
 
-    // for (let schema of schemas) {
-    //   const {
-    //     schema: { title, properties },
-    //     id,
-    //   } = schema
-    //   const response = Object.keys(properties).join('\n')
+      const { data: res } = await axios.post('/api/documents/query', query, {
+        headers: {
+          'Content-Type': 'text/plain',
+        },
+      })
 
-    //   const query = `
-    //   {
-    //     ${title}Documents(
-    //       udoTypeId: "${id}"
-    //     ){
-    //       udoi
-    //       ${response}
-    //     }
-    //   }`
-    //   console.log(query)
-    //   const { data: res } = await axios.post('/api/documents/query', query, {
-    //     headers: {
-    //       'Content-Type': 'text/plain',
-    //     },
-    //   })
-    //   console.log(res)
-    //   const r = res[title + 'Documents']
-    //   for (let i of r) {
-    //     data.push({ ...i, schema })
-    //   }
-    // }
-    // console.log(data)
-    // return data
-
-    const { data } = await axios.get('/api/documents')
+      const r = res[title + 'Documents']
+      for (let i of r) {
+        data.push({ ...i, schema })
+      }
+    }
 
     return data
   },
@@ -60,15 +54,19 @@ export default {
       }
     `
 
-    console.log(query)
-
     const { data: res } = await axios.post('/api/documents/query', query, {
       headers: {
         'Content-Type': 'text/plain',
       },
     })
-    console.log(res)
+
     const data = res['new' + title]
+    return data
+  },
+
+  async getById(id: string) {
+    const { data } = await axios.get('/api/documents/' + id)
+
     return data
   },
 
@@ -85,13 +83,12 @@ export default {
       }
     `
 
-    console.log(query)
     const { data: res } = await axios.post('/api/documents/query', query, {
       headers: {
         'Content-Type': 'text/plain',
       },
     })
-    console.log(res)
+
     const data = res[title]
     return data
   },
@@ -117,14 +114,12 @@ export default {
       }
     `
 
-    console.log(query)
-
     const { data: res } = await axios.post('/api/documents/query', query, {
       headers: {
         'Content-Type': 'text/plain',
       },
     })
-    console.log(res)
+
     const data = res[title]
     return data
   },
@@ -144,14 +139,12 @@ export default {
       }
     `
 
-    console.log(query)
-
     const { data } = await axios.post('/api/documents/query', query, {
       headers: {
         'Content-Type': 'text/plain',
       },
     })
-    console.log(data)
+
     return data
   },
 }

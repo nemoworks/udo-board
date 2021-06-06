@@ -8,18 +8,20 @@ const { Option } = Select
 
 export default function ({
   match: {
-    params: { schemaId, id },
+    params: { id },
   },
 }) {
   const [device, setDevice] = useState({})
   const [name, setName] = useState('')
   const [schema, setSchema] = useState({})
+  const [schemaId, setSchemaId] = useState('')
   const [content, setContent] = useState<any>(null)
   const [user, setUser] = useState<any>(null)
   const [users, setUsers] = useState<any[]>([])
 
   function updateDevice() {
-    // console.log(user)
+    //
+
     DeviceRQ.update(content, id, schemaId, schema).then(u => {
       message.success('保存成功', 0.5)
       setDevice(u)
@@ -29,24 +31,20 @@ export default function ({
   useEffect(() => {
     UserRQ.getAll().then(setUsers)
 
-    SchemaRQ.get(schemaId).then(s => {
-      const { schema: schemaContent } = s
-      DeviceRQ.get(id, schemaContent).then(d => {
-        setName(id)
-        setDevice(d)
-        setSchema(schemaContent)
-        setContent(d)
-      })
+    DeviceRQ.getById(id).then(({ id, data, type: { id: schemaId, schema } }) => {
+      setName(id)
+      setContent(data)
+      setSchema(schema)
+      setSchemaId(schemaId)
     })
-    // DeviceRQ.get(id).then(device => {
-    //     const { name, content, user, schema: schemaId } = device
 
-    //     SchemaRQ.get(schemaId).then(schema => {
-    //       setDevice(device)
-    //       setUser(user)
-    //       setName(id)
-    //       setContent(content)
-    //       setSchema(schema.content)
+    // SchemaRQ.get(schemaId).then(s => {
+    //     const { schema: schemaContent } = s
+    //     DeviceRQ.get(id, schemaContent).then(d => {
+    //         setName(id)
+    //         setDevice(d)
+    //         setSchema(schemaContent)
+    //         setContent(d)
     //     })
     // })
   }, [])

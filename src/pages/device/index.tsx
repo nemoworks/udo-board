@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { history } from 'umi'
-import { Card, Table, Tag, Dropdown, Menu, message, Tooltip } from 'antd'
+import { Card, Table, Tag, Dropdown, Menu, message, Tooltip, Modal } from 'antd'
 import { Input } from '@material-ui/core'
 import dayjs from 'dayjs'
 import { Icon, Page } from '@/components'
@@ -18,6 +18,9 @@ export default function () {
   const [devices, setDevices] = useState<any[]>([])
 
   const [sourceUrl, setSourceUrl] = useState('')
+  const [schemaName, setSchemaName] = useState('')
+
+  const [visible, setVisible] = useState(false)
 
   useEffect(() => {
     // DeviceRQ.getAll().then(setDevices)
@@ -30,8 +33,6 @@ export default function () {
     })
   }, [])
 
-  //console.log(devices)
-
   function deleteById(record: any) {
     DeviceRQ.delete(record).then(_ => {
       message.success('删除成功', 0.5)
@@ -40,17 +41,16 @@ export default function () {
   }
 
   function createFromUrl() {
-    SchemaRQ.createFromUrl(sourceUrl).then(({ id: udoi, type: { id: schemaId } }) => {
+    SchemaRQ.createFromUrl(sourceUrl, schemaName).then(({ id }) => {
       message.success('导入成功', 0.5)
-      history.push('/device/' + schemaId + '/' + udoi)
+      history.push('/device/' + id)
     })
   }
 
   function createFromSchema(schema: any) {
-    const { id: schemaId } = schema
     DeviceRQ.create(schema).then(({ udoi }) => {
       message.success('创建成功', 0.5)
-      history.push('/device/' + schemaId + '/' + udoi)
+      history.push('/device/' + udoi)
     })
   }
 
@@ -72,7 +72,7 @@ export default function () {
       '',
       (text: string, record: any, index: number) => (
         <>
-          <Icon type="icon-edit" onClick={_ => history.push('/device/' + record.schema.id + '/' + record.udoi)} />
+          <Icon type="icon-edit" onClick={_ => history.push('/device/' + record.udoi)} />
           <Icon type="icon-delete" onClick={_ => deleteById(record)} />
         </>
       ),
@@ -93,8 +93,19 @@ export default function () {
           <>
             <Input value={sourceUrl} onChange={e => setSourceUrl(e.target.value)} />
             <Tooltip overlay="从 URL 导入">
-              <Icon type="icon-import" onClick={() => createFromUrl()} />
+              <Icon type="icon-import" onClick={_ => sourceUrl !== '' && setVisible(true)} />
             </Tooltip>
+            <Modal
+              visible={visible}
+              onCancel={_ => setVisible(false)}
+              onOk={_ => {
+                setVisible(false)
+                createFromUrl()
+              }}
+            >
+              <span>Name </span>
+              <Input value={schemaName} onChange={e => setSchemaName(e.target.value)} />
+            </Modal>
             <Dropdown
               overlay={
                 <Menu>

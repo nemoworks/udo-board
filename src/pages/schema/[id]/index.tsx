@@ -23,7 +23,7 @@ export default function ({
   useEffect(() => {
     SchemaRQ.get(id).then(schema => {
       let { schema: content } = schema
-      // console.log('content',content)
+      //
       content = content ? content : {}
       const name = id
       const tags: any = ['tag1']

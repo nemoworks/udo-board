@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { history } from 'umi'
-import { Card, Table, Tag, Dropdown, Menu, Tooltip, message } from 'antd'
+import { Card, Table, Tag, Dropdown, Menu, Tooltip, message, Modal } from 'antd'
 import { Input } from '@material-ui/core'
 import dayjs from 'dayjs'
 import { Icon, Page } from '@/components'
@@ -13,8 +13,13 @@ const { Item } = Menu
 export default function () {
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
   const [searchText, setSearchText] = useState('')
+
   const [sourceUrl, setSourceUrl] = useState('')
   const [schemas, setSchemas] = useState<any[]>([])
+
+  const [schemaName, setSchemaName] = useState('')
+
+  const [visible, setVisible] = useState(false)
 
   useEffect(() => {
     SchemaRQ.getAll().then(setSchemas)
@@ -28,7 +33,7 @@ export default function () {
   }
 
   function createFromUrl() {
-    SchemaRQ.createFromUrl(sourceUrl).then(({ type: { id } }) => {
+    SchemaRQ.createFromUrl(sourceUrl, schemaName).then(({ type: { id } }) => {
       message.success('导入成功', 0.5)
       history.push('/schema/' + id)
     })
@@ -78,7 +83,7 @@ export default function () {
       100,
     ],
   ])
-  // console.log(columns)
+  //
 
   return (
     <Page className="schema" title="UDO-Board | 模板管理">
@@ -93,8 +98,21 @@ export default function () {
           <>
             <Input value={sourceUrl} onChange={e => setSourceUrl(e.target.value)} />
             <Tooltip overlay="从 URL 导入">
-              <Icon type="icon-import" onClick={() => createFromUrl()} />
+              <Icon type="icon-import" onClick={_ => sourceUrl !== '' && setVisible(true)} />
             </Tooltip>
+            <Modal
+              visible={visible}
+              onCancel={_ => setVisible(false)}
+              onOk={_ => {
+                // create by schemaName & sourceUrl
+
+                setVisible(false)
+                createFromUrl()
+              }}
+            >
+              <span>Name </span>
+              <Input value={schemaName} onChange={e => setSchemaName(e.target.value)} />
+            </Modal>
             <Dropdown overlay={overlay} trigger={['click']}>
               <Icon type="icon-template" />
             </Dropdown>
