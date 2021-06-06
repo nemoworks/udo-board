@@ -1,0 +1,113 @@
+.page.container.single.application_context {
+  .ant-card.grid > .ant-card-body {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    &::before {
+      display: none;
+    }
+
+    .ant-card.deviceCard,
+    .ant-card.operator {
+      width: 200px;
+      height: 200px;
+
+      .ant-card-extra .anticon {
+        font-size: 12px;
+      }
+    }
+
+    .ant-card.deviceCard {
+      transition: all 0.2s ease-in;
+    }
+
+    .ant-card.deviceCard.expanded {
+      width: 410px;
+      height: 410px;
+
+      .constraints {
+        .item {
+          margin-top: 5px;
+
+          .title {
+            font-weight: 800;
+            display: inline-block;
+            height: 30px;
+            line-height: 30px;
+            width: 80px;
+
+            &::before {
+              content: '· ';
+            }
+          }
+
+          input {
+            width: 200px;
+            display: inline;
+            border-radius: 0px;
+
+            &:focus {
+              border-bottom: 1px solid black;
+            }
+          }
+
+          .anticon {
+            display: none;
+          }
+        }
+
+        .item:hover {
+          .anticon {
+            display: inline-block;
+          }
+        }
+      }
+    }
+
+    .operator .ant-card-body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+  }
+}
+
+.ant-modal.single.application_context {
+  padding-left: 80px;
+  padding-right: 80px;
+
+  height: calc(100vh - 200px);
+
+  .ant-modal-content {
+    height: 100%;
+
+    .ant-modal-header {
+      .ant-btn {
+        position: absolute;
+        right: 24px;
+        top: 11.5px;
+      }
+    }
+
+    .ant-modal-body {
+      height: calc(100% - 55px);
+      overflow: auto;
+
+      &::-webkit-scrollbar {
+        width: 6px; /*滚动条的宽度*/
+      }
+      &::-webkit-scrollbar-thumb:vertical {
+        /*垂直滚动条的样式*/
+        background-color: rgba(153, 153, 153, 0.144);
+        border-radius: 3px;
+      }
+      &::-webkit-scrollbar-thumb:hover {
+        /*滚动条的hover样式*/
+        background-color: #0a0a0a94;
+        border-radius: 3px;
+      }
+    }
+  }
+}

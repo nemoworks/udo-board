@@ -1,6 +1,6 @@
 import SchemaRQ from './schema'
 import DeviceRQ from './device'
 import UserRQ from './user'
-import ApplicationRQ from './application'
+import ApplicationContextRQ from './application_context'
 
-export { SchemaRQ, DeviceRQ, UserRQ, ApplicationRQ }
+export { SchemaRQ, DeviceRQ, UserRQ, ApplicationContextRQ }

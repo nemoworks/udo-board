@@ -4,16 +4,16 @@ import { Card, Table, Tag, message } from 'antd'
 import { Input } from '@material-ui/core'
 import dayjs from 'dayjs'
 import { Icon, Page } from '@/components'
-import { ApplicationRQ } from '@/requests'
+import { ApplicationContextRQ } from '@/requests'
 import { generateColumns } from '@/utils'
 
 export default function () {
   const [searchText, setSearchText] = useState('')
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
-  const [applications, setApplications] = useState<any[]>([])
+  const [applicationContexts, setApplicationContexts] = useState<any[]>([])
 
   useEffect(() => {
-    ApplicationRQ.getAll().then(setApplications)
+    ApplicationContextRQ.getAll().then(setApplicationContexts)
   }, [])
 
   const columns = generateColumns([
@@ -25,12 +25,12 @@ export default function () {
       '',
       (text: string, record: any, index: number) => (
         <>
-          <Icon type="icon-edit" onClick={_ => history.push('/application/' + record.id)} />
+          <Icon type="icon-edit" onClick={_ => history.push('/application_context/' + record.id)} />
           <Icon
             type="icon-delete"
             onClick={_ =>
-              ApplicationRQ.delete(record.id).then(_ => {
-                setApplications(applications.filter(u => u.id !== record.id))
+              ApplicationContextRQ.delete(record.id).then(_ => {
+                setApplicationContexts(applicationContexts.filter(u => u.id !== record.id))
                 message.success('删除成功', 0.5)
               })
             }
@@ -42,7 +42,7 @@ export default function () {
   ])
 
   return (
-    <Page className="application" title="UDO-Board | 场景管理">
+    <Page className="application_context" title="UDO-Board | 场景管理">
       <Card
         title={
           <>
@@ -55,9 +55,9 @@ export default function () {
             <Icon
               type="icon-create"
               onClick={_ =>
-                ApplicationRQ.create().then(u => {
+                ApplicationContextRQ.create().then(u => {
                   message.success('创建成功', 0.5)
-                  history.push('/application/' + u.id)
+                  history.push('/application_context/' + u.id)
                 })
               }
             />
@@ -71,7 +71,7 @@ export default function () {
           }}
           rowKey="id"
           columns={columns}
-          dataSource={applications}
+          dataSource={applicationContexts}
         />
       </Card>
     </Page>

@@ -13,7 +13,7 @@ const pathMap = {
   property: '资产',
   device: '设备',
   schema: '模板',
-  application: '场景',
+  application_context: '场景',
 }
 
 export default function ({ children, location }) {
