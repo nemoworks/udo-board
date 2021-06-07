@@ -8,6 +8,13 @@ let users: any[] = [
     tags: ['I2EC'],
     email: 'perishcode@gmail.com',
   },
+  {
+    id: 'U000002',
+    name: 'Perish',
+    createOn: dayjs().format(),
+    tags: ['I2EC'],
+    email: 'perishcode@gmail.com',
+  },
 ]
 
 interface API {

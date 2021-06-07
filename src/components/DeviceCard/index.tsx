@@ -12,7 +12,7 @@ const constraintTypes = {
 }
 
 export default function DeviceCard({ deviceConfig, extra, onChange }) {
-  const { constraints } = deviceConfig
+  const { id, constraints } = deviceConfig
 
   const [device, setDevice] = useState({
     name: '设备A',
@@ -30,7 +30,7 @@ export default function DeviceCard({ deviceConfig, extra, onChange }) {
   return (
     <Card
       className={'deviceCard ' + (expanded ? 'expanded' : '')}
-      title={<span onClick={_ => setExpanded(!expanded)}>{name}</span>}
+      title={<span onClick={_ => setExpanded(!expanded)}>{id}</span>}
       size="small"
       hoverable={true}
       extra={extra}

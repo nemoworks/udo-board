@@ -4,6 +4,7 @@ import { Input } from '@material-ui/core'
 import { Page, Icon, DeviceCard, DeviceSelection } from '@/components'
 import { ApplicationContextRQ, DeviceRQ } from '@/requests'
 import './index.less'
+import device from '@/pages/device'
 
 export default function ({
   match: {
@@ -41,6 +42,8 @@ export default function ({
       setDevices(devices)
     })
   }, [])
+
+  console.log(devices)
   return (
     <Page className="application_context single" title="UDO-Board | 场景编辑">
       <Card
@@ -62,7 +65,7 @@ export default function ({
               <Button
                 type="primary"
                 onClick={_ => {
-                  setDevices(devices.concat(selectedDevices))
+                  setDevices(devices.concat(selectedDevices.map(id => ({ id, constraints: [] }))))
                   setVisible(false)
                 }}
               >
@@ -84,7 +87,7 @@ export default function ({
         </Card>
         {devices.map(d => (
           <DeviceCard
-            key={d}
+            key={d.id}
             extra={<Icon type="icon-delete" onClick={_ => deleteDeviceById(d)} />}
             deviceConfig={d}
             onChange={(u: any) => setDevices(devices.map(device => (device.id === u.id ? u : device)))}

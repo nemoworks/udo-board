@@ -6,7 +6,7 @@ import { generateColumns } from '@/utils'
 export default function DeviceSelection({ exclude, onSelect }) {
   const [devices, setDevices] = useState([
     {
-      id: 'D000001',
+      id: 'D000002',
       name: 'Perish 的手机',
       user: 'U000001',
       createOn: dayjs().format(),
@@ -17,7 +17,7 @@ export default function DeviceSelection({ exclude, onSelect }) {
       },
     },
     {
-      id: 'D000002',
+      id: 'D000003',
       name: 'Perish 的手机',
       user: 'U000001',
       createOn: dayjs().format(),
@@ -28,7 +28,7 @@ export default function DeviceSelection({ exclude, onSelect }) {
       },
     },
     {
-      id: 'D000003',
+      id: 'D000004',
       name: 'Perish 的手机',
       user: 'U000001',
       createOn: dayjs().format(),
@@ -56,7 +56,9 @@ export default function DeviceSelection({ exclude, onSelect }) {
       <Table
         rowSelection={{
           type: 'checkbox',
-          onChange: onSelect as any,
+          onChange: (keys, rows) => {
+            onSelect(keys)
+          },
         }}
         rowKey="id"
         columns={columns}
