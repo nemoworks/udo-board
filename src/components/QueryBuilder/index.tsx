@@ -1,6 +1,27 @@
-import { Select } from 'antd'
+import XForm from '@x-form/react-jsonschema'
+import { TranspilerFactory, __render__ } from '@x-form/react-jsonschema'
+import { Select, Input, DatePicker, Options, List } from '@/renders'
 
-const { Option } = Select
+const transpile = TranspilerFactory({
+  injectors: [],
+  generators: [
+    (schema: any) => {
+      const renders = schema[__render__]
+
+      switch (schema.type) {
+        case 'string':
+          renders.push(schema.enum ? Select : Input)
+          break
+        case 'date':
+          renders.push(DatePicker)
+          break
+        case 'array':
+          renders.push(Options, List)
+          break
+      }
+    },
+  ],
+})
 
 interface Props {
   constraints: {
@@ -11,22 +32,34 @@ interface Props {
   onChange: Function
 }
 
-const constraintTypeMap = {
-  string: ['==', '!='],
-}
-
-const constraintTypes = Object.keys(constraintTypeMap)
-
 export default function ({ constraints = [], onChange }: Props) {
   return (
-    <div className="queryBuilder">
-      <div className="list">
-        {constraints.map(constraint => (
-          <div className="item">
-            <Select>{}</Select>
-          </div>
-        ))}
-      </div>
-    </div>
+    <XForm
+      schema={{
+        type: 'array',
+        template: {
+          type: 'object',
+          properties: {
+            rule: {
+              type: 'string',
+              enum: ['前缀', '后缀'],
+            },
+            operator: {
+              type: 'string',
+              enum: ['选项一', '选项二'],
+            },
+            value: {
+              type: 'string',
+              enum: ['选项一', '选项二'],
+            },
+          },
+        },
+
+        initializeText: '初始化过滤规则',
+      }}
+      extensions={{
+        transpile,
+      }}
+    />
   )
 }
