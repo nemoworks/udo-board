@@ -37,7 +37,13 @@ export default function ({ children, location }) {
     <Layout>
       <Sider collapsible trigger={null} collapsed={collapse}>
         <Menu mode="inline">
-          <Item className="logo" icon={<Icon type="icon-cloud" />} onClick={() => setCollapse(!collapse)} title={null}>
+          <Item
+            className="logo"
+            icon={<Icon type="icon-cloud" />}
+            key="这个地方不加 Key 就会报错"
+            onClick={() => setCollapse(!collapse)}
+            title={null}
+          >
             UDO-Board
           </Item>
           {items}

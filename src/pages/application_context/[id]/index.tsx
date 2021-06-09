@@ -13,16 +13,15 @@ export default function ({
   const [applicationContext, setApplicationContext] = useState({})
   const [name, setName] = useState('')
   const [devices, setDevices] = useState<any[]>([])
-  const [selectedDevices, setSelectedDevices] = useState<any[]>([])
 
-  /**
-   * 对话框显示/隐藏状态
-   */
+  // 在对话框中已选择的待添加设备 id
+  const [selectedDevices, setSelectedDevices] = useState<any[]>([])
+  // '新增设备' 对话框显示/隐藏状态
   const [visible, setVisible] = useState(false)
 
-  /**
-   * 抽屉显示/隐藏状态
-   */
+  // 处于过滤规则编辑状态的设备信息
+  const [editingDevice, setEditingDevice] = useState<any>(null)
+  // '过滤规则编辑' 抽屉显示/隐藏状态
   const [open, setOpen] = useState(false)
 
   function updateApplicationContext() {
@@ -101,6 +100,7 @@ export default function ({
                   type="icon-filter"
                   onClick={_ => {
                     setOpen(true)
+                    setEditingDevice(d)
                   }}
                 />
                 <Icon type="icon-delete" onClick={_ => deleteDeviceById(d)} />
@@ -109,7 +109,7 @@ export default function ({
           />
         ))}
         <Drawer visible={open} title="消息过滤规则配置" onClose={_ => setOpen(false)} closeIcon={null} width="50%">
-          <QueryBuilder />
+          {editingDevice && <QueryBuilder constraints={editingDevice.constraints} onChange={console.log} />}
         </Drawer>
       </Card>
     </Page>
