@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react'
 import { Card, Tooltip, message, Modal, Button, Drawer } from 'antd'
 import { Input } from '@material-ui/core'
-import { Page, Icon, DeviceCard, DeviceSelection } from '@/components'
-import { ApplicationContextRQ, DeviceRQ } from '@/requests'
+import { Page, Icon, DeviceCard, DeviceSelection, QueryBuilder } from '@/components'
+import { ApplicationContextRQ } from '@/requests'
 import './index.less'
-import device from '@/pages/device'
 
 export default function ({
   match: {
@@ -16,7 +15,15 @@ export default function ({
   const [devices, setDevices] = useState<any[]>([])
   const [selectedDevices, setSelectedDevices] = useState<any[]>([])
 
+  /**
+   * 对话框显示/隐藏状态
+   */
   const [visible, setVisible] = useState(false)
+
+  /**
+   * 抽屉显示/隐藏状态
+   */
+  const [open, setOpen] = useState(false)
 
   function updateApplicationContext() {
     ApplicationContextRQ.update({
@@ -43,7 +50,6 @@ export default function ({
     })
   }, [])
 
-  console.log(devices)
   return (
     <Page className="application_context single" title="UDO-Board | 场景编辑">
       <Card
@@ -88,11 +94,23 @@ export default function ({
         {devices.map(d => (
           <DeviceCard
             key={d.id}
-            extra={<Icon type="icon-delete" onClick={_ => deleteDeviceById(d)} />}
-            deviceConfig={d}
-            onChange={(u: any) => setDevices(devices.map(device => (device.id === u.id ? u : device)))}
+            id={d.id}
+            extra={
+              <>
+                <Icon
+                  type="icon-filter"
+                  onClick={_ => {
+                    setOpen(true)
+                  }}
+                />
+                <Icon type="icon-delete" onClick={_ => deleteDeviceById(d)} />
+              </>
+            }
           />
         ))}
+        <Drawer visible={open} title="消息过滤规则配置" onClose={_ => setOpen(false)} closeIcon={null} width="50%">
+          <QueryBuilder />
+        </Drawer>
       </Card>
     </Page>
   )

@@ -11,15 +11,11 @@ const constraintTypes = {
   matchRe: '正则匹配',
 }
 
-export default function DeviceCard({ deviceConfig, extra, onChange }) {
-  const { id, constraints } = deviceConfig
-
+export default function DeviceCard({ id, extra }) {
   const [device, setDevice] = useState({
     name: '设备A',
     tags: ['标签1', '标签2'],
   })
-
-  const [expanded, setExpanded] = useState(true)
 
   useEffect(() => {
     // 添加 DeviceRQ
@@ -28,17 +24,11 @@ export default function DeviceCard({ deviceConfig, extra, onChange }) {
   const { name, tags } = device
 
   return (
-    <Card
-      className={'deviceCard ' + (expanded ? 'expanded' : '')}
-      title={<span onClick={_ => setExpanded(!expanded)}>{id}</span>}
-      size="small"
-      hoverable={true}
-      extra={extra}
-    >
+    <Card className="deviceCard" title={name} size="small" extra={extra}>
       {tags.map((tag, index) => (
         <Tag key={index}>{tag}</Tag>
       ))}
-      {expanded && (
+      {/* {expanded && (
         <Dropdown
           trigger={['click']}
           overlay={
@@ -101,7 +91,7 @@ export default function DeviceCard({ deviceConfig, extra, onChange }) {
             </div>
           ))}
         </div>
-      )}
+      )} */}
     </Card>
   )
 }
