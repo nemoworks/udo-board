@@ -2,13 +2,13 @@ import { defineConfig } from 'umi'
 import MonacoEditorWebpackPlugin from 'monaco-editor-webpack-plugin'
 
 export default defineConfig({
-  chainWebpack(memo) {
-    memo.plugin('monaco-editor').use(MonacoEditorWebpackPlugin, [
-      {
-        languages: ['json'],
-      },
-    ])
-  },
+  // chainWebpack(memo) {
+  //   memo.plugin('monaco-editor').use(MonacoEditorWebpackPlugin, [
+  //     {
+  //       languages: ['json'],
+  //     },
+  //   ])
+  // },
   nodeModulesTransform: {
     type: 'none',
   },
