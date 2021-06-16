@@ -15,6 +15,12 @@ const config: any = {
       valueSources: ['value'],
       preferWidgets: ['text'],
     },
+    timeRange: {
+      label: '时间段',
+      type: 'date',
+      valueSources: ['value'],
+      preferWidgets: ['date'],
+    },
   },
   renderBuilder: (props: any) => <Builder {...props} />,
 }

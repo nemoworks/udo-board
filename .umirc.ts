@@ -18,7 +18,7 @@ export default defineConfig({
   antd: {},
   proxy: {
     '/api': {
-      target: 'http://192.168.1.118:8080',
+      target: 'http://192.168.1.111:8080',
       changeOrigin: true,
     },
   },
