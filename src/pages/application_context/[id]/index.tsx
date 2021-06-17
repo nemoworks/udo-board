@@ -49,6 +49,10 @@ export default function ({
     })
   }, [])
 
+  useEffect(() => {
+    setDevices(devices.map(d => (d.id == editingDevice.id ? editingDevice : d)))
+  }, [editingDevice])
+
   return (
     <Page className="application_context single" title="UDO-Board | 场景编辑">
       <Card
@@ -109,7 +113,14 @@ export default function ({
           />
         ))}
         <Drawer visible={open} title="消息过滤规则配置" onClose={_ => setOpen(false)} closeIcon={null} width="50%">
-          {editingDevice && <QueryBuilder constraints={editingDevice.constraints} onChange={console.log} />}
+          {editingDevice && (
+            <QueryBuilder
+              device={editingDevice}
+              onQueryChange={d => {
+                setEditingDevice(d)
+              }}
+            />
+          )}
         </Drawer>
       </Card>
     </Page>
