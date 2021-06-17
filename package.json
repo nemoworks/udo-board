@@ -30,6 +30,7 @@
     "@umijs/preset-react": "1.x",
     "jsoneditor": "^9.1.7",
     "react-json-editor-ajrm": "^2.5.13",
+    "react-querybuilder": "^3.9.9",
     "umi": "^3.3.3"
   },
   "devDependencies": {
