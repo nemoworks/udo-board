@@ -13,7 +13,7 @@ const constraintTypes = {
 
 export default function DeviceCard({ id, extra }) {
   const [device, setDevice] = useState({
-    name: '设备A',
+    name: '资源A',
     tags: ['标签1', '标签2'],
   })
 

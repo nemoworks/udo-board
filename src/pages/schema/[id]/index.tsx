@@ -62,7 +62,7 @@ export default function ({
   }
 
   return (
-    <Page className="schema single" title="UDO-Board | 模板编辑">
+    <Page className="schema single" title="UDO-Board | 类型编辑">
       <Card
         title={<Input value={name} onChange={e => setName(e.target.value)} />}
         extra={
@@ -70,7 +70,7 @@ export default function ({
             <Tooltip className="preview" overlay={preview ? '关闭预览' : '开启预览'}>
               <Icon type={preview ? 'icon-preview-on' : 'icon-preview-off'} onClick={_ => setPreview(!preview)} />
             </Tooltip>
-            <Tooltip overlay="是否作为创建模板">
+            <Tooltip overlay="是否作为创建类型">
               <Switch checked={template} onChange={e => setTemplate(e.target.checked)} color="primary" />
             </Tooltip>
             <Tooltip overlay="保存">

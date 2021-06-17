@@ -2,13 +2,13 @@ import { defineConfig } from 'umi'
 import MonacoEditorWebpackPlugin from 'monaco-editor-webpack-plugin'
 
 export default defineConfig({
-  // chainWebpack(memo) {
-  //   memo.plugin('monaco-editor').use(MonacoEditorWebpackPlugin, [
-  //     {
-  //       languages: ['json'],
-  //     },
-  //   ])
-  // },
+  chainWebpack(memo) {
+    memo.plugin('monaco-editor').use(MonacoEditorWebpackPlugin, [
+      {
+        languages: ['json'],
+      },
+    ])
+  },
   nodeModulesTransform: {
     type: 'none',
   },
@@ -22,4 +22,5 @@ export default defineConfig({
       changeOrigin: true,
     },
   },
+  headScripts: [`//api.map.baidu.com/api?type=webgl&v=1.0&ak=vGAEHXg62nI2EiWITeBDfemKwyH2Ou83`],
 })

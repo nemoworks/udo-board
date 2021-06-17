@@ -55,7 +55,7 @@ export default function () {
 
   const overlay = (
     <Menu>
-      <Item onClick={createFromEmpty}>空白模板</Item>
+      <Item onClick={createFromEmpty}>空白类型</Item>
       {schemas
         // .filter(s => s.template)
         .map(s => (
@@ -68,9 +68,9 @@ export default function () {
 
   const columns = generateColumns([
     ['创建时间', 'createOn', () => <a>{dayjs().format('YYYY/MM/DD hh:mm:ss')}</a>], //(text: string) => <a>{dayjs(text).format('YYYY/MM/DD hh:mm:ss')}</a>],
-    ['模板名称', 'name', (text: string, record: any, index: number) => <span>{record.schema.title}</span>],
+    ['类型名称', 'name', (text: string, record: any, index: number) => <span>{record.schema.title}</span>],
     ['标签', 'tags', (tags: string[] = ['tag1']) => tags.map(tag => <Tag key={tag}>{tag}</Tag>)], //(tags: string[]) => tags.map(tag => <Tag key={tag}>{tag}</Tag>)],
-    ['模板', 'template', () => '√'], //(template: boolean) => (template ? '√' : '×')],
+    ['类型', 'template', () => '√'], //(template: boolean) => (template ? '√' : '×')],
     [
       '',
       '',
@@ -86,11 +86,11 @@ export default function () {
   //
 
   return (
-    <Page className="schema" title="UDO-Board | 模板管理">
+    <Page className="schema" title="UDO-Board | 类型管理">
       <Card
         title={
           <>
-            <span className="text">模板</span>
+            <span className="text">类型</span>
             <Input value={searchText} onChange={e => setSearchText(e.target.value)} />
           </>
         }

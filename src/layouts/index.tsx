@@ -11,8 +11,8 @@ const pathMap = {
   '': '主页',
   user: '客户',
   property: '资产',
-  device: '设备',
-  schema: '模板',
+  device: '资源',
+  schema: '类型',
   application_context: '场景',
 }
 

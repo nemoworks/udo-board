@@ -10,11 +10,11 @@ const columns = [
     render: (text: string) => <a>{text}</a>,
   },
   {
-    title: '设备名称',
+    title: '资源名称',
     dataIndex: 'name',
   },
   {
-    title: '设备配置',
+    title: '资源配置',
     dataIndex: 'configuration',
   },
   {

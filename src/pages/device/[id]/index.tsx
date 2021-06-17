@@ -50,7 +50,7 @@ export default function ({
   }, [])
 
   return (
-    <Page className="device single" title="UDO-Board | 设备编辑">
+    <Page className="device single" title="UDO-Board | 资源编辑">
       <Card
         title={<Input value={name} onChange={e => setName(e.target.value)} />}
         extra={
