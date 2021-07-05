@@ -19,7 +19,7 @@ const viewModes = {
           rowSelection={{
             type: 'checkbox',
           }}
-          rowKey="id"
+          rowKey="udoi"
           dataSource={devices}
           columns={generateColumns([
             ['创建时间', 'createOn', () => <span>{dayjs().format('YYYY/MM/DD hh:mm:ss')}</span>],
@@ -32,7 +32,7 @@ const viewModes = {
                 </span>
               ),
             ],
-            ['用户', 'user', (id: string = 'user') => (id ? <a href={'/user/' + id}>{id}</a> : <span>未指定</span>)],
+            ['用户', 'user', (id: string = '') => (id ? <a href={'/user/' + id}>{id}</a> : <span>未指定</span>)],
             ['标签', 'tags', (tags: string[] = ['tag']) => tags.map(tag => <Tag key={tag}>{tag}</Tag>)],
             [
               '',
@@ -77,14 +77,14 @@ export default function () {
 
   const [mode, setMode] = useState('map')
 
-  // useEffect(() => {
-  //   SchemaRQ.getAll().then(s => {
-  //     DeviceRQ.getAll(s).then(d => {
-  //       setDevices(d)
-  //       setSchemas(s)
-  //     })
-  //   })
-  // }, [])
+  useEffect(() => {
+    SchemaRQ.getAll().then(s => {
+      DeviceRQ.getAll(s).then(d => {
+        setDevices(d)
+        setSchemas(s)
+      })
+    })
+  }, [])
 
   function deleteById(record: any) {
     DeviceRQ.delete(record).then(_ => {

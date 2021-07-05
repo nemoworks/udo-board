@@ -22,9 +22,10 @@ export default function () {
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
-    SchemaRQ.getAll().then(setSchemas)
+    SchemaRQ.getAll().then(schema => {
+      setSchemas(schema)
+    })
   }, [])
-
   function createFromEmpty() {
     SchemaRQ.create({}).then(({ id }) => {
       message.success('创建成功', 0.5)
@@ -39,8 +40,8 @@ export default function () {
     })
   }
 
-  function createFromTemplate({ content, name, tags, template }) {
-    SchemaRQ.create(content, name + '-未命名副本', tags, template).then(({ id }) => {
+  function createFromTemplate({ schema }) {
+    SchemaRQ.create(schema).then(({ id }) => {
       message.success('创建成功', 0.5)
       history.push('/schema/' + id)
     })
@@ -83,7 +84,6 @@ export default function () {
       100,
     ],
   ])
-  //
 
   return (
     <Page className="schema" title="UDO-Board | 类型管理">

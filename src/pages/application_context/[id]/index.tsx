@@ -118,9 +118,9 @@ export default function ({
     })
   }, [])
 
-  useEffect(() => {
-    setDevices(devices.map(d => (d.id == editingDevice.id ? editingDevice : d)))
-  }, [editingDevice])
+  // useEffect(() => {
+  //   setDevices(devices.map(d => (d.id == editingDevice.id ? editingDevice : d)))
+  // }, [editingDevice])
 
   return (
     <Page className="application_context single" title="UDO-Board | 场景编辑">

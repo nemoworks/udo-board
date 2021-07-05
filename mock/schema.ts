@@ -7,13 +7,55 @@ let schemas: any[] = [
     // createOn: dayjs().format(),
     // tags: ['手机'],
     // template: true,
-    content: {
+    schema: {
       type: 'object',
-      title: '设备信息',
+      title: '设备A',
       properties: {
         name: {
           type: 'string',
           title: '设备名称',
+        },
+      },
+    },
+  },
+  {
+    id: 'S000002',
+    schema: {
+      type: 'object',
+      title: '人',
+      properties: {
+        name: {
+          type: 'string',
+          title: '人名',
+        },
+        state: {
+          type: 'string',
+          title: '状态',
+        },
+        location: {
+          type: 'string',
+          title: '地理编码',
+        },
+      },
+    },
+  },
+  {
+    id: 'S000003',
+    schema: {
+      type: 'object',
+      title: 'api',
+      properties: {
+        name: {
+          type: 'string',
+          title: '资源名称',
+        },
+        url: {
+          type: 'string',
+          title: '接口地址',
+        },
+        document: {
+          type: 'string',
+          title: '接口文档',
         },
       },
     },
@@ -60,7 +102,7 @@ export default {
   'DELETE /schemas/:id': ({ params: { id }, res }) => {
     schemas = schemas.filter(s => s.id !== id)
     res.send({
-      status: 'success',
+      status: 'success!!',
     })
   },
 } as APIMap

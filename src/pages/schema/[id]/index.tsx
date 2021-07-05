@@ -42,7 +42,7 @@ export default function ({
     SchemaRQ.update(
       {
         ...schema,
-        content,
+        schema: content,
       },
       id
     ).then(s => {

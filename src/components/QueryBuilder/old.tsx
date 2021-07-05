@@ -32,7 +32,6 @@
 //     const [value, setValue] = useState(Utils.checkTree(Utils.loadTree(queryValue), config))
 
 //     function changeHandler(tree: any, config: any) {
-//         console.log(Utils.getTree(tree))
 //         setValue(tree)
 //     }
 
@@ -82,7 +81,6 @@
 // //     this.setState({ tree: immutableTree, config: config })
 
 // //     const jsonTree = Utils.getTree(immutableTree)
-// //     console.log(jsonTree)
 // //     // `jsonTree` can be saved to backend, and later loaded to `queryValue`
 // //   }
 // // }
