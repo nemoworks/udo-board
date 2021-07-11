@@ -29,8 +29,8 @@ export default function ({
   useEffect(() => {
     UserRQ.getAll().then(setUsers)
 
-    DeviceRQ.getById(id).then(({ udoi, data, type: { id: schemaId, schema } }) => {
-      setName(udoi)
+    DeviceRQ.getById(id).then(({ id, data, type: { id: schemaId, schema } }) => {
+      setName(id)
       setContent(data)
       setSchema(schema)
       setSchemaId(schemaId)

@@ -5,6 +5,7 @@ export default function ({ device, onQueryChange }) {
   if (device.query == undefined) {
     device = { ...device, query: null }
   }
+
   const timeRangeOperators: { name: string; label: string }[] = [
     { name: '=', label: '=' },
     { name: '!=', label: '!=' },
@@ -16,7 +17,7 @@ export default function ({ device, onQueryChange }) {
 
   const fields = [
     { name: 'UDOType', label: 'UDO类型' },
-    { name: 'timeRange', label: '时间段', inputType: 'date', operators: timeRangeOperators },
+    { name: 'timeRange', label: '时间段', operators: timeRangeOperators },
   ]
 
   return (

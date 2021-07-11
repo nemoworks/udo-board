@@ -1,206 +1,180 @@
 import axios from 'axios'
 import dayjs from 'dayjs'
-
-// export default {
-//   async getAll(schemas: any[]) {
-//     let data: any[] = []
-//     for (let schema of schemas) {
-//       const {
-//         schema: { title, properties },
-//         id,
-//       } = schema
-//       const response = Object.keys(properties).join('\n')
-//       const query = `
-//       {
-//         ${title}Documents(
-//           udoTypeId: "${id}"
-//         ){
-//           udoi
-//           ${response}
-//         }
-//       }`
-
-//       const { data: res } = await axios.post('/api/documents/query', query, {
-//         headers: {
-//           'Content-Type': 'text/plain',
-//         },
-//       })
-
-//       const r = res[title + 'Documents']
-//       for (let i of r) {
-//         data.push({ ...i, schema })
-//       }
-//     }
-
-//     return data
-//   },
-
-//   async create(schema: any) {
-//     const {
-//       schema: { title, properties },
-//       id,
-//     } = schema
-
-//     const query = `
-//       {
-//         new${title}(
-//           content: {
-//           }
-//           udoTypeId: "${id}"
-//           uri : "http://localhost:8081/"
-//         ){
-//           udoi
-//         }
-//       }
-//     `
-
-//     const { data: res } = await axios.post('/api/documents/query', query, {
-//       headers: {
-//         'Content-Type': 'text/plain',
-//       },
-//     })
-
-//     const data = res['new' + title]
-//     return data
-//   },
-
-//   async getById(id: string) {
-//     const { data } = await axios.get('/api/documents/' + id)
-
-//     return data
-//   },
-
-//   async get(id: string, schema: any) {
-//     const { title, properties } = schema
-
-//     const response = Object.keys(properties).join('\n')
-
-//     const query = `
-//       {
-//         ${title}(udoi:"${id}"){
-//           ${response}
-//         }
-//       }
-//     `
-
-//     const { data: res } = await axios.post('/api/documents/query', query, {
-//       headers: {
-//         'Content-Type': 'text/plain',
-//       },
-//     })
-
-//     const data = res[title]
-//     return data
-//   },
-
-//   async update(content: any, id: string, schemaId: string, schema: any) {
-//     const { title, properties } = schema
-
-//     const response = Object.keys(properties).join('\n')
-//     let request = JSON.stringify(content).replace(',', '')
-//     for (let key in properties) {
-//       request = JSON.stringify(content).replace('"' + key + '"', key)
-//     }
-//     const query = `
-//       {
-//         update${title}(
-//           udoi:"${id}"
-//           content: ${request}
-//           udoTypeId: "${schemaId}"
-//           uri : "http://localhost:8081/"
-//         ){
-//           ${response}
-//         }
-//       }
-//     `
-
-//     const { data: res } = await axios.post('/api/documents/query', query, {
-//       headers: {
-//         'Content-Type': 'text/plain',
-//       },
-//     })
-
-//     const data = res[title]
-//     return data
-//   },
-
-//   async delete(device: any) {
-//     const {
-//       udoi,
-//       schema: {
-//         schema: { title },
-//       },
-//     } = device
-//     const query = `
-//       {
-//         delete${title}(udoi:"${udoi}"){
-//           deleteResult
-//         }
-//       }
-//     `
-
-//     const { data } = await axios.post('/api/documents/query', query, {
-//       headers: {
-//         'Content-Type': 'text/plain',
-//       },
-//     })
-
-//     return data
-//   },
-// }
+import { getRequest } from '@/utils'
 
 export default {
   async getAll(schemas: any[]) {
     let data: any[] = []
     for (let schema of schemas) {
-      const { id } = schema
-
-      const { data: res } = await axios.request({
-        method: 'GET',
-        url: '/mock/device',
-        params: {
-          schemaId: id,
+      const {
+        schema: { title, properties },
+        id,
+      } = schema
+      // let list: string[] = []
+      // for (let p in properties) {
+      //   if (typeof (properties[p]) != 'object') {
+      //     list.push(p)
+      //   }
+      // }
+      const list = Object.keys(properties).filter(e => properties[e].type != 'object')
+      const response = list.join('\n')
+      const query = `
+      {
+        ${title}Documents(
+          udoTypeId: "${id}"
+        ){
+          udoi
+          ${response}
+        }
+      }`
+      console.log(query)
+      const { data: res } = await axios.post('/api/documents/query', query, {
+        headers: {
+          'Content-Type': 'text/plain',
         },
       })
 
-      for (let i of res) {
-        data.push({ ...i, schema })
+      const r = res[title + 'Documents']
+      for (let i of r) {
+        data.push({ ...i, schema, data: i })
       }
     }
+    console.log(data)
     return data
   },
 
   async create(schema: any) {
-    const { id } = schema
+    const {
+      schema: { title, properties },
+      id,
+    } = schema
 
+    const query = `
+      {
+        new${title}(
+          content: {
+          }
+          udoTypeId: "${id}"
+          uri : "http://localhost:8081/"
+          uriType:"HTTP"
+        ){
+          udoi
+        }
+      }
+    `
+
+    const { data: res } = await axios.post('/api/documents/query', query, {
+      headers: {
+        'Content-Type': 'text/plain',
+      },
+    })
+
+    const data = res['new' + title]
+    return data
+  },
+
+  async createFromUrl(uri: string, name: string, location: string, avatarUrl: string, uriType: string = 'HTTP') {
+    const position = location.split(',').map(s => parseFloat(s))
     const { data } = await axios.request({
       method: 'POST',
-      url: '/mock/device',
-      data: { ...schema },
+      url: '/api/documents',
+      params: {
+        uri,
+        name,
+        longitude: position[0],
+        latitude: position[1],
+        avatarUrl,
+        uriType,
+      },
     })
+    console.log(data)
     return data
   },
 
   async getById(id: string) {
-    const { data } = await axios.get('/mock/device/' + id)
+    const { data } = await axios.get('/api/documents/' + id)
+    console.log(data)
+    return data
+  },
 
+  async get(id: string, schema: any) {
+    const { title, properties } = schema
+
+    const response = Object.keys(properties).join('\n')
+
+    const query = `
+    {
+      ${title}(udoi:"${id}"){
+        ${response}
+      }
+    }
+  `
+
+    const { data: res } = await axios.post('/api/documents/query', query, {
+      headers: {
+        'Content-Type': 'text/plain',
+      },
+    })
+
+    const data = res[title]
     return data
   },
 
   async update(content: any, id: string, schemaId: string, schema: any) {
-    const { data } = await axios.request({
-      url: '/mock/device',
-      method: 'PUT',
-      data: { data: content, udoi: id },
+    const { title, properties } = schema
+    // let location: string = content.location
+
+    const response = Object.keys(properties).join('\n')
+    // delete content['location']
+    let request = JSON.stringify(content).replaceAll(',', '\n')
+    request = getRequest(request, properties)
+    // request = request.replace('}', '')
+    // request = request + '\n' + 'location:"' + location + '"\n}'
+
+    const query = `
+      {
+        update${title}(
+          udoi:"${id}"
+          content: 
+          ${request}
+          udoTypeId: "${schemaId}"
+          uri : "http://localhost:8081/"
+        ){
+          udoi
+        }
+      }
+    `
+    console.log(query)
+    const { data: res } = await axios.post('/api/documents/query', query, {
+      headers: {
+        'Content-Type': 'text/plain',
+      },
     })
 
+    const data = res[title]
     return data
   },
 
   async delete(device: any) {
-    const { udoi } = device
+    const {
+      udoi,
+      schema: {
+        schema: { title },
+      },
+    } = device
+    const query = `
+      {
+        delete${title}(udoi:"${udoi}"){
+          deleteResult
+        }
+      }
+    `
 
-    const { data } = await axios.delete('/mock/device/' + udoi)
+    const { data } = await axios.post('/api/documents/query', query, {
+      headers: {
+        'Content-Type': 'text/plain',
+      },
+    })
 
     return data
   },
@@ -237,3 +211,112 @@ export default {
     return location
   },
 }
+
+// export default {
+//   async getAll(schemas: any[]) {
+//     let data: any[] = []
+//     for (let schema of schemas) {
+//       const { id } = schema
+
+//       const { data: res } = await axios.request({
+//         method: 'GET',
+//         url: '/mock/device',
+//         params: {
+//           schemaId: id,
+//         },
+//       })
+
+//       for (let i of res) {
+//         data.push({ ...i, schema })
+//       }
+//     }
+//     return data
+//   },
+
+//   async create(schema: any) {
+//     const { id } = schema
+
+//     const { data } = await axios.request({
+//       method: 'POST',
+//       url: '/mock/device',
+//       data: { ...schema },
+//     })
+//     return data
+//   },
+
+//   async createFromUrl(uri: string, name: string, location: string, uriType: string, avatarUrl: string) {
+
+//     const { data } = await axios.request({
+//       url: '/device',
+//       method: 'POST',
+//       data: { uri, name, location, avatarUrl },
+//     })
+//     return data
+//   },
+
+//   async getById(id: string) {
+//     const { data } = await axios.get('/mock/device/' + id)
+
+//     return data
+//   },
+
+//   async update(content: any, id: string, schemaId: string, schema: any) {
+//     const { data } = await axios.request({
+//       url: '/mock/device',
+//       method: 'PUT',
+//       data: { data: content, udoi: id },
+//     })
+
+//     return data
+//   },
+
+//   // async updateLocation(content: any, id: string) {
+//   //   const { data } = await axios.request({
+//   //     url: '/device',
+//   //     method: 'PUT',
+//   //     data: { location: content, udoi: id },
+//   //   })
+
+//   //   return data
+//   // },
+
+//   async delete(device: any) {
+//     const { udoi } = device
+
+//     const { data } = await axios.delete('/mock/device/' + udoi)
+
+//     return data
+//   },
+
+//   async dns(url: string) {
+//     let {
+//       data: { data },
+//     } = await axios.request({
+//       url: '/dns',
+//       method: 'GET',
+//       params: {
+//         token: 'tF22KFCgPmYHEvBr',
+//         domain: url,
+//       },
+//     })
+//     if (data == null) {
+//       data = []
+//     }
+//     return data
+//   },
+
+//   async ip(ip: string, type: string) {
+//     const {
+//       data: { location },
+//     } = await axios.request({
+//       url: '/ip',
+//       method: 'GET',
+//       params: {
+//         key: 'f4833b485afbe530c057be70b1893ed5',
+//         type,
+//         ip,
+//       },
+//     })
+//     return location
+//   },
+// }

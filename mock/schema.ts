@@ -3,17 +3,13 @@ import dayjs from 'dayjs'
 let schemas: any[] = [
   {
     id: 'S000001',
-    // name: '手机模板',
-    // createOn: dayjs().format(),
-    // tags: ['手机'],
-    // template: true,
     schema: {
       type: 'object',
-      title: '设备A',
+      title: '资源',
       properties: {
         name: {
           type: 'string',
-          title: '设备名称',
+          title: '资源名称',
         },
       },
     },
@@ -22,7 +18,7 @@ let schemas: any[] = [
     id: 'S000002',
     schema: {
       type: 'object',
-      title: '人',
+      title: 'human',
       properties: {
         name: {
           type: 'string',
@@ -34,31 +30,57 @@ let schemas: any[] = [
         },
         location: {
           type: 'string',
-          title: '地理编码',
+          title: '位置',
         },
       },
     },
   },
+
   {
-    id: 'S000003',
     schema: {
+      $schema: 'http://json-schema.org/draft-06/schema#',
+      additionalProperties: false,
       type: 'object',
-      title: 'api',
+      title: 'ip',
       properties: {
-        name: {
+        country: {
           type: 'string',
-          title: '资源名称',
         },
-        url: {
+        province: {
           type: 'string',
-          title: '接口地址',
         },
-        document: {
+        city: {
           type: 'string',
-          title: '接口文档',
+        },
+        district: {
+          type: 'string',
+        },
+        isp: {
+          type: 'string',
+        },
+        ip: {
+          type: 'string',
+        },
+        infocode: {
+          type: 'string',
+        },
+        location: {
+          type: 'string',
+        },
+        status: {
+          type: 'string',
+        },
+        info: {
+          type: 'string',
         },
       },
+      required: ['country', 'province', 'city', 'district', 'isp', 'ip', 'infocode', 'location', 'status', 'info'],
     },
+    id: '-GHudXoByHFkYFqEinMq',
+    createdOn: 0,
+    createdBy: 'nemoworks',
+    modifiedOn: 0,
+    contextInfo: {},
   },
 ]
 
@@ -95,7 +117,7 @@ export default {
   },
 
   'PUT /schemas/:id': ({ body, params: { id } }, res) => {
-    schemas = schemas.map(s => (s.id === id ? body : s))
+    schemas = schemas.map(s => (s.id === id ? { id, schema: body } : s))
     res.send(body)
   },
 

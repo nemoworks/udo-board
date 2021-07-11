@@ -11,7 +11,7 @@ const constraintTypes = {
   matchRe: '正则匹配',
 }
 
-export default function DeviceCard({ id, extra }) {
+export default function ({ id, extra }) {
   const [device, setDevice] = useState({
     name: '资源A',
     tags: ['标签1', '标签2'],

@@ -18,7 +18,7 @@ export default defineConfig({
   antd: {},
   proxy: {
     '/api': {
-      target: 'http://192.168.1.111:8080',
+      target: 'http://172.27.148.129:8080',
       changeOrigin: true,
     },
     '/dns': {
@@ -30,5 +30,6 @@ export default defineConfig({
       changeOrigin: true,
     },
   },
-  headScripts: [`//api.map.baidu.com/api?type=webgl&v=1.0&ak=vvgjuqKmPMlaC633vyVbmuVzPTR5v3Ia`],
+  //headScripts: [`//api.map.baidu.com/api?type=webgl&v=1.0&ak=vvgjuqKmPMlaC633vyVbmuVzPTR5v3Ia`],
+  headScripts: [`http://api.map.baidu.com/api?v=2.0&ak=vvgjuqKmPMlaC633vyVbmuVzPTR5v3Ia`],
 })

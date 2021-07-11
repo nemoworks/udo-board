@@ -19,19 +19,21 @@ let devices: any[] = [
         },
       },
     },
+    contextInfo: {},
   },
   {
     udoi: 'D000002',
     data: {
       name: '小明',
       state: 'true',
-      location: '118.961365,32.110012',
+      location: '116.402544,39.928216',
+      avatarUrl: 'https://img.icons8.com/ios-filled/50/000000/naruto.png',
     },
     type: {
       id: 'S000002',
       schema: {
         type: 'object',
-        title: '人',
+        title: 'human',
         properties: {
           name: {
             type: 'string',
@@ -43,24 +45,29 @@ let devices: any[] = [
           },
           location: {
             type: 'string',
-            title: '地理编码',
+            title: '位置',
+          },
+          avatarUrl: {
+            type: 'string',
           },
         },
       },
     },
+    contextInfo: {},
   },
   {
     udoi: 'D000003',
     data: {
       name: '小红',
       state: 'true',
-      location: '116.402544,39.928216',
+      location: '117.402544,39.928216',
+      avatarUrl: 'https://img.icons8.com/glyph-neue/64/000000/super-mario.png',
     },
     type: {
       id: 'S000002',
       schema: {
         type: 'object',
-        title: '人',
+        title: 'human',
         properties: {
           name: {
             type: 'string',
@@ -72,69 +79,119 @@ let devices: any[] = [
           },
           location: {
             type: 'string',
-            title: '地理编码',
+            title: '位置',
+          },
+          avatarUrl: {
+            type: 'string',
           },
         },
       },
     },
+    contextInfo: {},
   },
   {
-    udoi: 'D000004',
+    udoi: 'AF64D641-D9CF-46CA-8A72-5225EFEBC411',
     data: {
-      name: '天气查询',
-      url: 'https://restapi.amap.com/v3/weather/weatherInfo',
-      document: 'https://lbs.amap.com/api/webservice/guide/api/weatherinfo',
+      name: 'test user',
+      state: 'true',
+      location: '130.963191,32.110777',
+      avatarUrl: 'http://icons.iconarchive.com/icons/paomedia/small-n-flat/1024/map-marker-icon.png',
     },
     type: {
-      id: 'S000003',
+      id: 'S000002',
       schema: {
         type: 'object',
-        title: 'api',
+        title: 'human',
         properties: {
           name: {
             type: 'string',
-            title: '资源名称',
+            title: '人名',
           },
-          url: {
+          state: {
             type: 'string',
-            title: '接口地址',
+            title: '状态',
           },
-          document: {
+          location: {
             type: 'string',
-            title: '接口文档',
+            title: '位置',
+          },
+          avatarUrl: {
+            type: 'string',
           },
         },
       },
     },
+    contextInfo: {},
   },
+
   {
-    udoi: 'D000005',
-    data: {
-      name: '生活指数',
-      url: 'https://v2.alapi.cn/api/weather/life?location=南京&token=3XtHPDUJX7x38zUj',
-      document: 'https://www.alapi.cn/api/view/69',
-    },
     type: {
-      id: 'S000003',
       schema: {
+        $schema: 'http://json-schema.org/draft-06/schema#',
+        additionalProperties: false,
         type: 'object',
-        title: 'api',
         properties: {
-          name: {
+          country: {
             type: 'string',
-            title: '资源名称',
           },
-          url: {
+          province: {
             type: 'string',
-            title: '接口地址',
           },
-          document: {
+          city: {
             type: 'string',
-            title: '接口文档',
+          },
+          district: {
+            type: 'string',
+          },
+          isp: {
+            type: 'string',
+          },
+          ip: {
+            type: 'string',
+          },
+          infocode: {
+            type: 'string',
+          },
+          location: {
+            type: 'string',
+          },
+          status: {
+            type: 'string',
+          },
+          info: {
+            type: 'string',
+          },
+          avatarUrl: {
+            type: 'string',
           },
         },
+        required: ['country', 'province', 'city', 'district', 'isp', 'ip', 'infocode', 'location', 'status', 'info'],
       },
+      id: '-GHudXoByHFkYFqEinMq',
+      createdOn: 0,
+      createdBy: 'nemoworks',
+      modifiedOn: 0,
+      contextInfo: {},
     },
+    data: {
+      country: '中国',
+      province: '黑龙江省',
+      city: '牡丹江市',
+      district: '阳明区',
+      isp: '中国联通',
+      ip: '221.206.131.10',
+      infocode: '10000',
+      location: '129.634645,44.596328',
+      status: '1',
+      info: 'OK',
+      avatarUrl: 'http://icons.iconarchive.com/icons/paomedia/small-n-flat/1024/map-marker-icon.png',
+    },
+    udoi: '92HudXoByHFkYFqEhXOM',
+    createdOn: 0,
+    createdBy: 'nemoworks',
+    modifiedOn: 0,
+    uri: 'https://restapi.amap.com/v5/ip?key=f4833b485afbe530c057be70b1893ed5&type=4&ip=221.206.131.10',
+    contextInfo: { contexts: {} },
   },
 ]
 
@@ -152,6 +209,7 @@ function initializeDevice(source: any) {
   return {
     type: source,
     udoi,
+    data: {},
   }
 }
 
@@ -170,8 +228,36 @@ export default {
     res.send(device)
   },
 
+  'POST /device': ({ body }, res) => {
+    const schema = {
+      id: 'S000001',
+      schema: {
+        type: 'object',
+        title: '设备A',
+        properties: {
+          name: {
+            type: 'string',
+            title: '设备名称',
+          },
+        },
+      },
+    }
+    let device = initializeDevice(schema)
+    devices.push(device)
+    const content = { uri: body.uri, data: { name: body.name, location: body.loaction }, avater: body.avater }
+    devices = devices.map(d => (d.udoi === device.udoi ? { ...d, ...content } : d))
+    const id: string = device.udoi
+    const result = { ...device, id }
+    res.send(result)
+  },
+
   'PUT /mock/device': ({ body }, res) => {
     devices = devices.map(d => (d.udoi === body.udoi ? { ...d, ...body } : d))
+    res.send(body)
+  },
+
+  'PUT /device': ({ body }, res) => {
+    devices = devices.map(d => (d.udoi === body.udoi ? { ...d, contextInfo: { location: body.location } } : d))
     res.send(body)
   },
 

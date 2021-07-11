@@ -3,9 +3,9 @@ import { history } from 'umi'
 import { Card, Table, Tag, Dropdown, Menu, message, Tooltip, Modal } from 'antd'
 import { Input } from '@material-ui/core'
 import dayjs from 'dayjs'
-import { Icon, Page, Map } from '@/components'
+import { Icon, Page, Map, Graph } from '@/components'
 import { DeviceRQ, SchemaRQ } from '@/requests'
-import { generateColumns } from '@/utils'
+import { generateColumns, getLocation } from '@/utils'
 import './index.less'
 
 const { Item } = Menu
@@ -59,7 +59,7 @@ const viewModes = {
   time: {
     name: '时序',
     render({ devices }) {
-      return <div>时序视图</div>
+      return <Graph devices={devices} />
     },
   },
 }
@@ -72,16 +72,20 @@ export default function () {
 
   const [sourceUrl, setSourceUrl] = useState('')
   const [schemaName, setSchemaName] = useState('')
+  const [uriType, setUriType] = useState('')
 
   const [visible, setVisible] = useState(false)
 
   const [mode, setMode] = useState('map')
 
+  const [location, setLocation] = useState('')
+  const [avatarUrl, setAvatarUrl] = useState('')
+
   useEffect(() => {
     SchemaRQ.getAll().then(s => {
+      setSchemas(s)
       DeviceRQ.getAll(s).then(d => {
         setDevices(d)
-        setSchemas(s)
       })
     })
   }, [])
@@ -93,11 +97,22 @@ export default function () {
     })
   }
 
+  useEffect(() => {
+    if (location.length != 0) {
+      DeviceRQ.createFromUrl(sourceUrl, schemaName, location, avatarUrl).then(d => {
+        message.success('导入成功', 0.5)
+        history.push('/device/' + d.id)
+      })
+    }
+  }, [location])
+
   function createFromUrl() {
-    SchemaRQ.createFromUrl(sourceUrl, schemaName).then(({ id }) => {
-      message.success('导入成功', 0.5)
-      history.push('/device/' + id)
-    })
+    getLocation(sourceUrl, setLocation)
+    // SchemaRQ.createFromUrl(sourceUrl, schemaName).then(d => {
+    //   message.success('导入成功', 0.5)
+    //   getLocation(sourceUrl, d.id)
+
+    // })
   }
 
   function createFromSchema(schema: any) {
@@ -147,16 +162,24 @@ export default function () {
             >
               <span>Name </span>
               <Input value={schemaName} onChange={e => setSchemaName(e.target.value)} />
+
+              <span>avatarUrl </span>
+              <Input value={avatarUrl} onChange={e => setAvatarUrl(e.target.value)} />
             </Modal>
             <Dropdown
               trigger={['click']}
               overlay={
                 <Menu>
-                  {schemas.map(s => (
-                    <Item key={s.id} onClick={_ => createFromSchema(s)}>
-                      {s.id}
-                    </Item>
-                  ))}
+                  {schemas.length != 0
+                    ? schemas.map(s => {
+                        console.log('sssad')
+                        return (
+                          <Item key={s.id} onClick={_ => createFromSchema(s)}>
+                            {s.id}
+                          </Item>
+                        )
+                      })
+                    : null}
                 </Menu>
               }
             >
