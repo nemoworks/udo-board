@@ -8,6 +8,7 @@ export default function (schema) {
 
   switch (schema.type) {
     case 'string':
+    case 'number':
       renders.push(schema.enum ? Select : Input)
       break
     case 'date':
