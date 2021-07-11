@@ -18,9 +18,18 @@ export default defineConfig({
   antd: {},
   proxy: {
     '/api': {
-      target: 'http://192.168.1.111:8080',
+      target: 'http://172.27.148.129:8080',
+      changeOrigin: true,
+    },
+    '/dns': {
+      target: 'https://v2.alapi.cn/api/domain',
+      changeOrigin: true,
+    },
+    '/ip': {
+      target: 'https://restapi.amap.com/v5',
       changeOrigin: true,
     },
   },
-  headScripts: [`//api.map.baidu.com/api?type=webgl&v=1.0&ak=vGAEHXg62nI2EiWITeBDfemKwyH2Ou83`],
+  //headScripts: [`//api.map.baidu.com/api?type=webgl&v=1.0&ak=vvgjuqKmPMlaC633vyVbmuVzPTR5v3Ia`],
+  headScripts: [`http://api.map.baidu.com/api?v=2.0&ak=vvgjuqKmPMlaC633vyVbmuVzPTR5v3Ia`],
 })

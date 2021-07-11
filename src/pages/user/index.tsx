@@ -70,8 +70,6 @@ export default function () {
             type: 'checkbox',
             onChange: (keys: any[], rows: any[]) => {
               setSelectedRowKeys(keys as any)
-              console.log(keys)
-              console.log(rows)
             },
           }}
           rowKey="id"

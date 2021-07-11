@@ -22,9 +22,10 @@ export default function () {
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
-    SchemaRQ.getAll().then(setSchemas)
+    SchemaRQ.getAll().then(schema => {
+      setSchemas(schema)
+    })
   }, [])
-
   function createFromEmpty() {
     SchemaRQ.create({}).then(({ id }) => {
       message.success('创建成功', 0.5)
@@ -33,23 +34,23 @@ export default function () {
   }
 
   function createFromUrl() {
-    SchemaRQ.createFromUrl(sourceUrl, schemaName).then(({ type: { id } }) => {
-      message.success('导入成功', 0.5)
-      history.push('/schema/' + id)
-    })
+    // SchemaRQ.createFromUrl(sourceUrl, schemaName).then(({ type: { id } }) => {
+    //   message.success('导入成功', 0.5)
+    //   history.push('/schema/' + id)
+    // })
   }
 
-  function createFromTemplate({ content, name, tags, template }) {
-    SchemaRQ.create(content, name + '-未命名副本', tags, template).then(({ id }) => {
+  function createFromTemplate({ schema }) {
+    SchemaRQ.create(schema).then(({ id }) => {
       message.success('创建成功', 0.5)
       history.push('/schema/' + id)
     })
   }
 
-  function deleteById(id) {
-    SchemaRQ.delete(id).then(_ => {
+  function deleteById(schema: any) {
+    SchemaRQ.delete(schema).then(_ => {
       message.success('删除成功', 0.5)
-      setSchemas(schemas.filter(s => s.id !== id))
+      setSchemas(schemas.filter(s => s.id !== schema.id))
     })
   }
 
@@ -57,7 +58,7 @@ export default function () {
     <Menu>
       <Item onClick={createFromEmpty}>空白类型</Item>
       {schemas
-        // .filter(s => s.template)
+        .filter(s => !Object.keys(s.schema).find(k => k == '$schema'))
         .map(s => (
           <Item key={s.id} onClick={_ => createFromTemplate(s)}>
             {s.id}模版
@@ -77,13 +78,12 @@ export default function () {
       (text: string, record: any, index: number) => (
         <>
           <Icon type="icon-edit" onClick={_ => history.push('/schema/' + record.id)} />
-          <Icon type="icon-delete" onClick={_ => deleteById(record.id)} />
+          <Icon type="icon-delete" onClick={_ => deleteById(record)} />
         </>
       ),
       100,
     ],
   ])
-  //
 
   return (
     <Page className="schema" title="UDO-Board | 类型管理">

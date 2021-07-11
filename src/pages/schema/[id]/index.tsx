@@ -23,7 +23,6 @@ export default function ({
   useEffect(() => {
     SchemaRQ.get(id).then(schema => {
       let { schema: content } = schema
-      //
       content = content ? content : {}
       const name = id
       const tags: any = ['tag1']
@@ -39,13 +38,7 @@ export default function ({
   }, [])
 
   function updateSchema() {
-    SchemaRQ.update(
-      {
-        ...schema,
-        content,
-      },
-      id
-    ).then(s => {
+    SchemaRQ.update(content, id).then(s => {
       message.success('保存成功', 0.5)
       setSchema(s)
     })

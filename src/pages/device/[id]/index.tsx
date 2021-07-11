@@ -20,8 +20,6 @@ export default function ({
   const [users, setUsers] = useState<any[]>([])
 
   function updateDevice() {
-    //
-
     DeviceRQ.update(content, id, schemaId, schema).then(u => {
       message.success('保存成功', 0.5)
       setDevice(u)
