@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Map, Marker, NavigationControl, InfoWindow } from 'react-bmapgl'
 import './index.less'
 
