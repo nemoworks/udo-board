@@ -1,7 +1,7 @@
 import { __render__ } from '@x-form/react-jsonschema'
 import renders from '../renders'
 
-const { Select, Input, DatePicker, Link } = renders
+const { Select, Input, DatePicker, Link, Checkbox } = renders
 
 export default function (schema) {
   const renders = schema[__render__]
@@ -10,6 +10,9 @@ export default function (schema) {
     case 'string':
     case 'number':
       renders.push(schema.enum ? Select : Input)
+      break
+    case 'boolean':
+      renders.push(Checkbox)
       break
     case 'date':
       renders.push(DatePicker)
