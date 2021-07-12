@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Card, Tooltip, message, Modal, Button, Drawer, Dropdown, Menu } from 'antd'
 import { Input } from '@material-ui/core'
-import { Page, Icon, DeviceCard, DeviceSelection, QueryBuilder, DevicesCard } from '@/components'
+import { Page, Icon, DeviceCard, DeviceSelection, QueryBuilder, DevicesCard, Graph } from '@/components'
 import { ApplicationContextRQ } from '@/requests'
 import './index.less'
 
@@ -13,14 +13,14 @@ const viewModes = {
     // render() {
     //   return <div>卡片</div>
     // },
-    render({ devices, setDevices, deleteDeviceById }) {
-      return <DevicesCard devices={devices} setDevices={setDevices} deleteDeviceById={deleteDeviceById} />
+    render({ applicationContext, setFilter }) {
+      return <QueryBuilder device={applicationContext} onQueryChange={setFilter} />
     },
   },
   graph: {
     name: '通信图',
-    render({ devices }) {
-      return <div>通信图</div>
+    render({ applicationContext }) {
+      return <Graph devices={{}} />
     },
   },
 }
@@ -35,12 +35,36 @@ export default function ({
   const [devices, setDevices] = useState<any[]>([])
   const [mode, setMode] = useState('card')
 
+  const [filter, setFilter] = useState<any>({})
+  const [open, setOpen] = useState(false)
+
+  useEffect(() => {
+    // setDevices(devices.map(d => (d.id == editingDevice.id ? editingDevice : d)))
+    if (Object.keys(filter).length != 0) {
+      //console.log(editingDevice)
+      const {
+        query: { rules },
+      } = filter
+      //console.log(rules)
+      let data = {}
+      for (let r of rules) {
+        const { operator, field, value } = r
+        let result = {}
+        result[operator] = []
+        //console.log(result)
+        let re = {}
+        re[field] = value
+        result[operator].push(re)
+        //console.log(result)
+        data = { ...data, ...result }
+      }
+      console.log(data)
+      setApplicationContext(data)
+    }
+  }, [filter])
+
   function updateApplicationContext() {
-    ApplicationContextRQ.update({
-      ...applicationContext,
-      name,
-      devices,
-    }).then(u => {
+    ApplicationContextRQ.update(id, applicationContext).then(u => {
       message.success('保存成功', 0.5)
       setApplicationContext(u)
     })
@@ -52,11 +76,7 @@ export default function ({
 
   useEffect(() => {
     ApplicationContextRQ.get(id).then(applicationContext => {
-      const { name, devices } = applicationContext
-
       setApplicationContext(applicationContext)
-      setName(name)
-      setDevices(devices)
     })
   }, [])
 
@@ -84,10 +104,13 @@ export default function ({
             <Tooltip overlay="保存">
               <Icon type="icon-store" onClick={updateApplicationContext} />
             </Tooltip>
+            <Tooltip overlay="消息过滤">
+              <Icon type="icon-store" onClick={_ => setOpen(!open)} />
+            </Tooltip>
           </>
         }
       >
-        {devices.length != 0 ? viewModes[mode].render({ devices, setDevices, deleteDeviceById }) : null}
+        {viewModes[mode].render({ applicationContext, setFilter })}
       </Card>
     </Page>
   )

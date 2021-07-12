@@ -5,7 +5,7 @@ import { DeviceRQ } from '.'
 export default {
   async getAll() {
     const { data } = await axios.get('/api/schemas')
-    console.log(data)
+    // console.log(data)
     return data
   },
 

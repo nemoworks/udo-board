@@ -172,7 +172,7 @@ export default function () {
                 <Menu>
                   {schemas.length != 0
                     ? schemas.map(s => {
-                        console.log('sssad')
+                        //console.log('sssad')
                         return (
                           <Item key={s.id} onClick={_ => createFromSchema(s)}>
                             {s.id}

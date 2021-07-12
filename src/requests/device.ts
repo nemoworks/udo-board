@@ -1,6 +1,6 @@
 import axios from 'axios'
 import dayjs from 'dayjs'
-import { getRequest } from '@/utils'
+import { getRequest, getReponse } from '@/utils'
 
 export default {
   async getAll(schemas: any[]) {
@@ -16,8 +16,7 @@ export default {
       //     list.push(p)
       //   }
       // }
-      const list = Object.keys(properties).filter(e => properties[e].type != 'object')
-      const response = list.join('\n')
+      const response = getReponse(properties)
       const query = `
       {
         ${title}Documents(
@@ -27,7 +26,7 @@ export default {
           ${response}
         }
       }`
-      console.log(query)
+      // console.log(query)
       const { data: res } = await axios.post('/api/documents/query', query, {
         headers: {
           'Content-Type': 'text/plain',
@@ -39,7 +38,7 @@ export default {
         data.push({ ...i, schema, data: i })
       }
     }
-    console.log(data)
+    // console.log(data)
     return data
   },
 
@@ -87,13 +86,13 @@ export default {
         uriType,
       },
     })
-    console.log(data)
+    // console.log(data)
     return data
   },
 
   async getById(id: string) {
     const { data } = await axios.get('/api/documents/' + id)
-    console.log(data)
+    // console.log(data)
     return data
   },
 
@@ -135,7 +134,7 @@ export default {
       {
         update${title}(
           udoi:"${id}"
-          content: 
+          content:
           ${request}
           udoTypeId: "${schemaId}"
           uri : "http://localhost:8081/"
@@ -144,7 +143,7 @@ export default {
         }
       }
     `
-    console.log(query)
+    // console.log(query)
     const { data: res } = await axios.post('/api/documents/query', query, {
       headers: {
         'Content-Type': 'text/plain',

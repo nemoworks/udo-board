@@ -19,10 +19,10 @@ export default function ({ devices: ds }) {
   useEffect(() => {
     if (ds.length != 0) {
       const others = ds
-        .filter(d => Object.keys(d.data).find(d => d == 'longitude'))
+        .filter(d => Object.keys(d.data).find(d => d == 'location'))
         .map(d => {
           let location = ','
-          location = d.data.longitude + ',' + d.data.latitude
+          location = d.data.location.longitude + ',' + d.data.location.latitude
           return {
             ...d,
             location,
@@ -33,8 +33,8 @@ export default function ({ devices: ds }) {
         .map(d => {
           let location = ','
           if (Object.keys(d).find(e => e == 'data')) {
-            if (Object.keys(d.data).find(e => e == 'longitude') && d.data.longitude != '') {
-              location = d.data.longitude + ',' + d.data.latitude
+            if (Object.keys(d.data).find(e => e == 'location')) {
+              location = d.data.location.longitude + ',' + d.data.location.latitude
             }
           }
           return {
@@ -156,7 +156,10 @@ export default function ({ devices: ds }) {
               return (
                 <div
                   style={{
-                    background: `url('` + extData.data.avatarUrl + `')`,
+                    background:
+                      `url('http://icons.iconarchive.com/icons/paomedia/small-n-flat/1024/` +
+                      extData.data.avatarUrl +
+                      `')`,
                     backgroundSize: 'contain',
                     backgroundRepeat: 'no-repeat',
                     backgroundPosition: 'center',

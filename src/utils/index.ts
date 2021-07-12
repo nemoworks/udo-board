@@ -51,7 +51,7 @@ function getRequest(content: string, properties: any): string {
   let request = content
   for (let key in properties) {
     request = request.replace('"' + key + '"', key)
-    console.log(key, properties[key])
+    // console.log(key, properties[key])
     if (properties[key].type == 'object') {
       request = getRequest(request, properties[key].properties)
     }
@@ -60,4 +60,16 @@ function getRequest(content: string, properties: any): string {
   return request
 }
 
-export { generateColumns, getLocation, getRequest }
+function getReponse(properties: any): string {
+  let response = ''
+  for (let key in properties) {
+    if (properties[key].type != 'object') {
+      response = response + key + '\n'
+    } else if (properties[key].type == 'object') {
+      response = response + key + '{\n' + getReponse(properties[key].properties) + '}'
+    }
+  }
+  return response
+}
+
+export { generateColumns, getLocation, getRequest, getReponse }

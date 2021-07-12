@@ -7,18 +7,13 @@ export default function ({ device, onQueryChange }) {
   }
 
   const timeRangeOperators: { name: string; label: string }[] = [
-    { name: '=', label: '=' },
-    { name: '!=', label: '!=' },
-    { name: '<', label: '<' },
-    { name: '>', label: '>' },
-    { name: '<=', label: '<=' },
-    { name: '>=', label: '>=' },
+    { name: 'timeLargerValues', label: 'timeLargerValues' },
+    { name: 'timeLessValues', label: 'timeLessValues' },
+    { name: 'largerThanValues', label: 'largerThanValues' },
+    { name: 'lessThanValues', label: 'lessThanValues' },
   ]
 
-  const fields = [
-    { name: 'UDOType', label: 'UDO类型' },
-    { name: 'timeRange', label: '时间段', operators: timeRangeOperators },
-  ]
+  const fields = [{ name: 'timeRange', label: '时间段', operators: timeRangeOperators }]
 
   return (
     <>

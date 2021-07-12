@@ -15,11 +15,11 @@ export default function () {
   useEffect(() => {
     ApplicationContextRQ.getAll().then(setApplicationContexts)
   }, [])
-
+  //console.log('applicationContexts', applicationContexts)
   const columns = generateColumns([
     ['创建时间', 'createOn', (text: string) => <a>{dayjs(text).format('YYYY/MM/DD hh:mm:ss')}</a>],
-    ['场景名称', 'name'],
-    ['标签', 'tags', (tags: string[]) => tags.map(tag => <Tag key={tag}>{tag}</Tag>)],
+    ['场景名称', 'name', (text: string, record: any, index: number) => <span>{record.id}</span>],
+    ['标签', 'tags', (tags: string[] = []) => tags.map(tag => <Tag key={tag}>{tag}</Tag>)],
     [
       '',
       '',
@@ -57,7 +57,7 @@ export default function () {
               onClick={_ =>
                 ApplicationContextRQ.create().then(u => {
                   message.success('创建成功', 0.5)
-                  history.push('/application_context/' + u.id)
+                  history.push('/application_context/' + u)
                 })
               }
             />
