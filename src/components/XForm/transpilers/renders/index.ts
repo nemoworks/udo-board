@@ -6,6 +6,7 @@ import DatePicker from './DatePicker'
 import Select from './Select'
 import Link from './Link'
 import Info from './Info'
+import Checkbox from './Checkbox'
 /* ------- */
 
 /* 高级组件 */
@@ -30,6 +31,7 @@ const renders = {
   Label,
   Divider,
   Info,
+  Checkbox,
 }
 
 Object.keys(renders).forEach(key => (renders[key] = HOC(renders[key])))
