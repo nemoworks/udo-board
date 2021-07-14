@@ -157,9 +157,9 @@ export default function ({
       })
     }
   }, [schemas])
-  // console.log('devices', devices)
+  console.log('devices', devices)
   // console.log('schemas', schemas)
-  // console.log('names', names)
+  console.log('names', names)
   return (
     <>
       <Page className="application_context single" title="UDO-Board | 场景编辑">

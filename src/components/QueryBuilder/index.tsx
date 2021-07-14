@@ -14,8 +14,12 @@ export default function ({ device, onQueryChange, udoId, contextId, setSelectedU
     { name: 'largerThanValues', label: 'largerThanValues' },
     { name: 'lessThanValues', label: 'lessThanValues' },
   ]
+  const distaceOperators: { name: string; label: string }[] = [{ name: 'distanceScopes', label: 'distanceScopes' }]
 
-  const fields = [{ name: 'clock', label: '时间段', operators: timeRangeOperators }]
+  const fields = [
+    { name: 'clock', label: '时间段', operators: timeRangeOperators },
+    { name: 'scope', label: '距离', operators: distaceOperators },
+  ]
 
   return (
     <>

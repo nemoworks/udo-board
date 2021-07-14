@@ -6,6 +6,9 @@ import { SearchOutlined } from '@ant-design/icons'
 import './index.less'
 import { useState } from 'react'
 import { DeviceRQ } from '@/requests'
+import CodeMirror from '@uiw/react-codemirror'
+import 'codemirror/keymap/sublime'
+import 'codemirror/theme/monokai.css'
 
 export default function () {
   const [query, setQuery] = useState('')
@@ -53,18 +56,33 @@ export default function () {
             </Button> */}
       <div className="right">
         {/* <MonacoEditor
-                    width='100%'
-                    language="json"
-                    theme="vs-light"
-                    value={queryResult}
+          width='100%'
+          language="json"
+          theme="vs-light"
+          value={queryResult}
 
-                    options={{
-                        minimap: {
-                            showSlider: 'mouseover',
-                        },
-                    }}
-                /> */}
-        <span>{queryResult}</span>
+          options={{
+            minimap: {
+              showSlider: 'mouseover',
+            },
+            readOnly: true,
+          }}
+        /> */}
+        {/* <span>{queryResult}</span> */}
+        <CodeMirror
+          value={queryResult}
+          options={{
+            theme: 'vs-light',
+            keyMap: 'sublime',
+            tabsize: 0,
+            mode: 'jsx',
+            readOnly: true,
+            autofouse: true,
+          }}
+          // onChange={(instance, change) => {
+          //   instance.scrollTo(0, instance.getDoc().height)
+          // }}
+        />
       </div>
     </>
   )

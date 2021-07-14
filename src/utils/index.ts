@@ -1,6 +1,7 @@
 import { DeviceRQ } from '@/requests'
 import { history } from 'umi'
 import { BaiduMap, Marker, Label, MarkerClusterer, Polyline } from 'react-baidu-maps'
+import { useModel } from 'umi'
 
 type ColumnDifinition = [string, string, Function, number] | [string, string, Function] | [string, string]
 

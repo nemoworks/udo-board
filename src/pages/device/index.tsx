@@ -57,7 +57,7 @@ const viewModes = {
     },
   },
   graphQL: {
-    name: 'GraphQL查询',
+    name: 'DOQL',
     render() {
       return <GraphQL />
     },
