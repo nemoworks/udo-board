@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { history } from 'umi'
-import { Card, Table, Tag, message } from 'antd'
+import { Card, Table, Tag, message, Modal } from 'antd'
 import { Input } from '@material-ui/core'
 import dayjs from 'dayjs'
 import { Icon, Page } from '@/components'
@@ -11,6 +11,8 @@ export default function () {
   const [searchText, setSearchText] = useState('')
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
   const [applicationContexts, setApplicationContexts] = useState<any[]>([])
+  const [visible, setVisible] = useState(false)
+  const [contextName, setContextName] = useState('')
 
   useEffect(() => {
     ApplicationContextRQ.getAll().then(setApplicationContexts)
@@ -47,20 +49,26 @@ export default function () {
         title={
           <>
             <span className="text">场景</span>
-            <Input value={searchText} onChange={e => setSearchText(e.target.value)} />
           </>
         }
         extra={
           <>
-            <Icon
-              type="icon-create"
-              onClick={_ =>
-                ApplicationContextRQ.create().then(u => {
+            <Modal
+              visible={visible}
+              onCancel={_ => setVisible(false)}
+              onOk={_ => {
+                setVisible(false)
+                // console.log(contextName)
+                ApplicationContextRQ.create(contextName).then(u => {
                   message.success('创建成功', 0.5)
                   history.push('/application_context/' + u)
                 })
-              }
-            />
+              }}
+            >
+              <span>ContextName: </span>
+              <Input value={contextName} onChange={e => setContextName(e.target.value)} />
+            </Modal>
+            <Icon type="icon-create" onClick={_ => setVisible(true)} />
           </>
         }
       >

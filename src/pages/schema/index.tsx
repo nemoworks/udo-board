@@ -91,15 +91,15 @@ export default function () {
         title={
           <>
             <span className="text">类型</span>
-            <Input value={searchText} onChange={e => setSearchText(e.target.value)} />
+            {/* <Input value={searchText} onChange={e => setSearchText(e.target.value)} /> */}
           </>
         }
         extra={
           <>
-            <Input value={sourceUrl} onChange={e => setSourceUrl(e.target.value)} />
+            {/* <Input value={sourceUrl} onChange={e => setSourceUrl(e.target.value)} />
             <Tooltip overlay="从 URL 导入">
               <Icon type="icon-import" onClick={_ => sourceUrl !== '' && setVisible(true)} />
-            </Tooltip>
+            </Tooltip> */}
             <Modal
               visible={visible}
               onCancel={_ => setVisible(false)}

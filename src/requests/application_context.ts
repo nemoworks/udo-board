@@ -16,8 +16,48 @@ export default {
     return data
   },
 
-  async create(name = '未命名场景', devices = [], tags = []) {
-    const id = 'C' + String(Math.floor(Math.random() * 1000000)).padStart(6, '0')
+  async getRule(id: string, udoId: string) {
+    //console.log(id)
+    const { data } = await axios.request({
+      url: '/api/applicationContext/filter',
+      method: 'get',
+      params: {
+        id,
+        uid: udoId,
+      },
+    })
+    console.log(data)
+    return data
+  },
+
+  async addUdo(name: string, cxtId: string) {
+    console.log(name, cxtId)
+    const { data } = await axios.request({
+      url: '/api/applicationContext/' + cxtId,
+      method: 'POST',
+      params: {
+        udoId: name,
+      },
+    })
+    console.log(data)
+    return data
+  },
+
+  async deleteUdo(name: string, cxtId: string) {
+    console.log(name, cxtId)
+    const { data } = await axios.request({
+      url: '/api/applicationContext/' + cxtId,
+      method: 'delete',
+      params: {
+        udoId: name,
+      },
+    })
+    console.log(data)
+    return data
+  },
+
+  async create(id: string, name = '未命名场景', devices = [], tags = []) {
+    // const id = 'C' + String(Math.floor(Math.random() * 1000000)).padStart(6, '0')
     const { data } = await axios.request({
       url: '/api/applicationContext',
       method: 'POST',
@@ -29,7 +69,7 @@ export default {
     return data
   },
 
-  async update(id: string, filter: any) {
+  async update(id: string, filter: any, udoId: string) {
     let r: string = JSON.stringify(filter)
     const { data } = await axios.request({
       url: '/api/applicationContext/filter',
@@ -39,10 +79,10 @@ export default {
       },
       params: {
         id,
+        uid: udoId,
       },
       data: r,
     })
-    console.log(data)
     const result = JSON.parse(data)
     console.log(result)
     return result

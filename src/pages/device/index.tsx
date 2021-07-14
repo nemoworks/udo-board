@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { history } from 'umi'
-import { Card, Table, Tag, Dropdown, Menu, message, Tooltip, Modal } from 'antd'
+import { Card, Table, Tag, Dropdown, Menu, message, Tooltip, Modal, Select, Radio } from 'antd'
 import { Input } from '@material-ui/core'
 import dayjs from 'dayjs'
-import { Icon, Page, Map, Graph } from '@/components'
+import { Icon, Page, Map, Graph, GraphQL } from '@/components'
 import { DeviceRQ, SchemaRQ } from '@/requests'
 import { generateColumns, getLocation } from '@/utils'
 import './index.less'
@@ -56,10 +56,10 @@ const viewModes = {
       return <Map devices={devices} />
     },
   },
-  time: {
-    name: '时序',
-    render({ devices }) {
-      return <Graph devices={devices} />
+  graphQL: {
+    name: 'GraphQL查询',
+    render() {
+      return <GraphQL />
     },
   },
 }
@@ -73,6 +73,7 @@ export default function () {
   const [sourceUrl, setSourceUrl] = useState('')
   const [schemaName, setSchemaName] = useState('')
   const [uriType, setUriType] = useState('')
+  const [typeVisible, setTypeVisialbe] = useState(false)
 
   const [visible, setVisible] = useState(false)
 
@@ -81,14 +82,47 @@ export default function () {
   const [location, setLocation] = useState('')
   const [avatarUrl, setAvatarUrl] = useState('')
 
+  const [selectedId, setSelectId] = useState('')
+
+  const [createModalVisible, setCreateModalVisible] = useState(false)
+  const [createType, setCreateType] = useState('schema')
+  const [createSchema, setCreateSchema] = useState('')
+  const [gatewayType, setGatewayType] = useState('HTTP')
+  const [createUrl, setCreateUrl] = useState('')
+  const [createName, setCreateName] = useState('')
+  const [createAvatarUrl, setCreateAvatarUrl] = useState('')
+  const [createLng, setCreateLng] = useState('')
+  const [createLat, setCreateLat] = useState('')
+  const [value, setValue] = useState(1)
+
   useEffect(() => {
     SchemaRQ.getAll().then(s => {
       setSchemas(s)
-      DeviceRQ.getAll(s).then(d => {
-        setDevices(d)
-      })
     })
   }, [])
+
+  useEffect(() => {
+    if (schemas.length != 0) {
+      DeviceRQ.getAll(schemas).then(d => {
+        setDevices(d)
+      })
+    }
+  }, [schemas])
+
+  // useEffect(() => {
+  //   if (schemas.length != 0) {
+  //     const InterVal = setInterval(() => {
+  //       DeviceRQ.getAll(schemas).then(d => {
+  //         setDevices(d)
+  //       })
+  //     }, 10000)
+  //     return () => {
+  //       clearInterval(InterVal)
+  //     }
+
+  //   }
+
+  // }, [schemas])
 
   function deleteById(record: any) {
     DeviceRQ.delete(record).then(_ => {
@@ -99,7 +133,8 @@ export default function () {
 
   useEffect(() => {
     if (location.length != 0) {
-      DeviceRQ.createFromUrl(sourceUrl, schemaName, location, avatarUrl).then(d => {
+      //console.log(location)
+      DeviceRQ.createFromUrl(createUrl, createName, location, createAvatarUrl, gatewayType).then(d => {
         message.success('导入成功', 0.5)
         history.push('/device/' + d.id)
       })
@@ -107,7 +142,16 @@ export default function () {
   }, [location])
 
   function createFromUrl() {
-    getLocation(sourceUrl, setLocation)
+    if (value == 0) {
+      getLocation(createUrl, setLocation)
+    } else if (value == 1) {
+      DeviceRQ.createFromUrl(createUrl, createName, createLng + ',' + createLat, createAvatarUrl, gatewayType).then(
+        d => {
+          message.success('导入成功', 0.5)
+          history.push('/device/' + d.id)
+        }
+      )
+    }
     // SchemaRQ.createFromUrl(sourceUrl, schemaName).then(d => {
     //   message.success('导入成功', 0.5)
     //   getLocation(sourceUrl, d.id)
@@ -116,10 +160,24 @@ export default function () {
   }
 
   function createFromSchema(schema: any) {
-    DeviceRQ.create(schema).then(({ udoi }) => {
+    DeviceRQ.create(schema, gatewayType, createUrl).then(({ udoi }) => {
       message.success('创建成功', 0.5)
       history.push('/device/' + udoi)
     })
+  }
+
+  function create() {
+    if (createType == 'schema') {
+      if (createSchema != '') {
+        // console.log(createSchema, gatewayType)
+        createFromSchema(schemas.find(s => (s.id = createSchema)))
+      }
+    } else if (createType == 'url') {
+      if (createUrl != '') {
+        // console.log(createUrl, createName, createAvatarUrl, gatewayType)
+        createFromUrl()
+      }
+    }
   }
 
   return (
@@ -129,11 +187,137 @@ export default function () {
         title={
           <>
             <span className="text">资源</span>
-            <Input value={searchText} onChange={e => setSearchText(e.target.value)} />
+            {/* <Input value={searchText} onChange={e => setSearchText(e.target.value)} /> */}
           </>
         }
         extra={
           <>
+            <Icon
+              type="icon-create"
+              onClick={_ => {
+                setCreateModalVisible(true)
+              }}
+            ></Icon>
+            <Modal
+              visible={createModalVisible}
+              onCancel={_ => setCreateModalVisible(false)}
+              onOk={_ => {
+                setCreateModalVisible(false)
+                create()
+              }}
+            >
+              <table>
+                <tr>
+                  <td>
+                    <span>导入方式: </span>
+                  </td>
+                  <td>
+                    <Select value={createType} onChange={t => setCreateType(t)}>
+                      {['schema', 'url'].map(t => (
+                        <Select.Option key={t} value={t}>
+                          {t}
+                        </Select.Option>
+                      ))}
+                    </Select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span>gatewayType: </span>
+                  </td>
+                  <td>
+                    <Select value={gatewayType} onChange={t => setGatewayType(t)}>
+                      {['HTTP', 'MQTT'].map(t => (
+                        <Select.Option key={t} value={t}>
+                          {t}
+                        </Select.Option>
+                      ))}
+                    </Select>
+                  </td>
+                </tr>
+                {createType == 'schema' ? (
+                  <tr>
+                    <td>
+                      <span>schema:</span>
+                    </td>
+                    <td>
+                      <Select value={createSchema} onChange={s => setCreateSchema(s)}>
+                        {schemas.map(s => (
+                          <Select.Option key={s.id} value={s.id}>
+                            {s.schema.title + '/' + s.id}
+                          </Select.Option>
+                        ))}
+                      </Select>
+                    </td>
+                  </tr>
+                ) : null}
+                {createType == 'url' ? (
+                  <>
+                    <tr>
+                      <td>
+                        <span>name:</span>
+                      </td>
+                      <td>
+                        <Input value={createName} onChange={e => setCreateName(e.target.value)}></Input>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span>avatarUrl:</span>
+                      </td>
+                      <td>
+                        <Input value={createAvatarUrl} onChange={e => setCreateAvatarUrl(e.target.value)}></Input>
+                      </td>
+                    </tr>
+                  </>
+                ) : null}
+                <tr>
+                  <td>
+                    <span>url:</span>
+                  </td>
+                  <td>
+                    <Input value={createUrl} onChange={e => setCreateUrl(e.target.value)}></Input>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span>填写location:</span>
+                  </td>
+                  <td>
+                    <Radio.Group
+                      onChange={e => {
+                        setValue(e.target.value)
+                      }}
+                      value={value}
+                    >
+                      <Radio value={1}>是</Radio>
+                      <Radio value={0}>否</Radio>
+                    </Radio.Group>
+                  </td>
+                </tr>
+                {value == 1 ? (
+                  <>
+                    <tr>
+                      <td>
+                        <span>经度:</span>
+                      </td>
+                      <td>
+                        <Input value={createLng} onChange={e => setCreateLng(e.target.value)}></Input>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span>纬度:</span>
+                      </td>
+                      <td>
+                        <Input value={createLat} onChange={e => setCreateLat(e.target.value)}></Input>
+                      </td>
+                    </tr>
+                  </>
+                ) : null}
+              </table>
+            </Modal>
+
             <Dropdown
               trigger={['click']}
               overlay={
@@ -148,7 +332,7 @@ export default function () {
             >
               <Icon type="icon-change" />
             </Dropdown>
-            <Input value={sourceUrl} onChange={e => setSourceUrl(e.target.value)} />
+            {/* <Input value={sourceUrl} onChange={e => setSourceUrl(e.target.value)} />
             <Tooltip overlay="URL 导入">
               <Icon type="icon-import" onClick={_ => sourceUrl !== '' && setVisible(true)} />
             </Tooltip>
@@ -165,6 +349,18 @@ export default function () {
 
               <span>avatarUrl </span>
               <Input value={avatarUrl} onChange={e => setAvatarUrl(e.target.value)} />
+            </Modal> */}
+            {/* <Modal
+              visible={typeVisible}
+              onCancel={_ => setTypeVisialbe(false)}
+              onOk={_ => {
+                setTypeVisialbe(false)
+                createFromSchema(schemas.find(s => s.id = selectedId))
+              }}
+            >
+
+              <span>uriType </span>
+              <Input value={uriType} onChange={e => setUriType(e.target.value)} />
             </Modal>
             <Dropdown
               trigger={['click']}
@@ -172,19 +368,19 @@ export default function () {
                 <Menu>
                   {schemas.length != 0
                     ? schemas.map(s => {
-                        //console.log('sssad')
-                        return (
-                          <Item key={s.id} onClick={_ => createFromSchema(s)}>
-                            {s.id}
-                          </Item>
-                        )
-                      })
+                      //console.log('sssad')
+                      return (
+                        <Item key={s.id} onClick={_ => { setTypeVisialbe(true); setSelectId(s.id) }}>
+                          {s.id}
+                        </Item>
+                      )
+                    })
                     : null}
                 </Menu>
               }
             >
               <Icon type="icon-create" />
-            </Dropdown>
+            </Dropdown> */}
           </>
         }
       >

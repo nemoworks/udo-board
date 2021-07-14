@@ -6,6 +6,9 @@ export default {
   async getAll(schemas: any[]) {
     let data: any[] = []
     for (let schema of schemas) {
+      // if (Object.keys(schema.schema).find(k => k == 'title') == undefined) {
+      //   continue
+      // }
       const {
         schema: { title, properties },
         id,
@@ -16,6 +19,9 @@ export default {
       //     list.push(p)
       //   }
       // }
+      if (Object.keys(properties).find(e => e == 'data')) {
+        delete properties['data']
+      }
       const response = getReponse(properties)
       const query = `
       {
@@ -38,11 +44,12 @@ export default {
         data.push({ ...i, schema, data: i })
       }
     }
-    // console.log(data)
+    console.log(data)
     return data
   },
 
-  async create(schema: any) {
+  async create(schema: any, createType: string, url: string) {
+    console.log(schema, createType, url)
     const {
       schema: { title, properties },
       id,
@@ -54,8 +61,8 @@ export default {
           content: {
           }
           udoTypeId: "${id}"
-          uri : "http://localhost:8081/"
-          uriType:"HTTP"
+          uri : "${url}"
+          uriType:"${createType}"
         ){
           udoi
         }
@@ -73,6 +80,7 @@ export default {
   },
 
   async createFromUrl(uri: string, name: string, location: string, avatarUrl: string, uriType: string = 'HTTP') {
+    console.log(uri, name, location, avatarUrl, uriType)
     const position = location.split(',').map(s => parseFloat(s))
     const { data } = await axios.request({
       method: 'POST',
@@ -86,13 +94,13 @@ export default {
         uriType,
       },
     })
-    // console.log(data)
+    console.log(data)
     return data
   },
 
   async getById(id: string) {
     const { data } = await axios.get('/api/documents/' + id)
-    // console.log(data)
+    console.log(data)
     return data
   },
 
@@ -143,7 +151,7 @@ export default {
         }
       }
     `
-    // console.log(query)
+    console.log(query)
     const { data: res } = await axios.post('/api/documents/query', query, {
       headers: {
         'Content-Type': 'text/plain',
@@ -151,6 +159,7 @@ export default {
     })
 
     const data = res[title]
+    // console.log(data)
     return data
   },
 
@@ -175,6 +184,15 @@ export default {
       },
     })
 
+    return data
+  },
+
+  async grapgQL(query: string) {
+    const { data } = await axios.post('/api/documents/query', query, {
+      headers: {
+        'Content-Type': 'text/plain',
+      },
+    })
     return data
   },
 

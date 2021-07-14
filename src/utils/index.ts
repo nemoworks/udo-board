@@ -40,6 +40,7 @@ function getIp(dns: any[], setLocation: any) {
 }
 
 function getLocation(url: string, setLocation: any) {
+  // console.log(url)
   DeviceRQ.dns(url).then(d => {
     if (d.length != 0) {
       getIp(d, setLocation)

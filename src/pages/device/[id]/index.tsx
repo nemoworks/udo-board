@@ -21,8 +21,12 @@ export default function ({
 
   function updateDevice() {
     DeviceRQ.update(content, id, schemaId, schema).then(u => {
-      message.success('保存成功', 0.5)
-      setDevice(u)
+      if (u == undefined) {
+        // message.success('保存失败', 0.5)
+      } else {
+        message.success('保存成功', 0.5)
+        setDevice(u)
+      }
     })
   }
 
@@ -30,6 +34,7 @@ export default function ({
     UserRQ.getAll().then(setUsers)
 
     DeviceRQ.getById(id).then(({ id, data, type: { id: schemaId, schema } }) => {
+      // console.log(id, data, schemaId, schema)
       setName(id)
       setContent(data)
       setSchema(schema)

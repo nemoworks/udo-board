@@ -21,20 +21,12 @@ export default function ({ devices: ds }) {
       const others = ds
         .filter(d => Object.keys(d.data).find(d => d == 'location'))
         .map(d => {
-          let location = ','
-          location = d.data.location.longitude + ',' + d.data.location.latitude
-          return {
-            ...d,
-            location,
-          }
-        })
-      const people = ds
-        .filter(d => d.schema.schema.title == 'human')
-        .map(d => {
-          let location = ','
+          let location = '0,0'
           if (Object.keys(d).find(e => e == 'data')) {
             if (Object.keys(d.data).find(e => e == 'location')) {
-              location = d.data.location.longitude + ',' + d.data.location.latitude
+              if (Object.keys(d.data.location).find(e => e == 'longitude')) {
+                location = d.data.location.longitude + ',' + d.data.location.latitude
+              }
             }
           }
           return {
@@ -42,6 +34,22 @@ export default function ({ devices: ds }) {
             location,
           }
         })
+      // const people = ds
+      //   .filter(d => d.schema.schema.title == 'human')
+      //   .map(d => {
+      //     let location = '0,0'
+      //     if (Object.keys(d).find(e => e == 'data')) {
+      //       if (Object.keys(d.data).find(e => e == 'location')) {
+      //         if (Object.keys(d.data.location).find(e => e == 'longitude')) {
+      //           location = d.data.location.longitude + ',' + d.data.location.latitude
+      //         }
+      //       }
+      //     }
+      //     return {
+      //       ...d,
+      //       location,
+      //     }
+      //   })
       const total: any[] = [...others].map(d => {
         const { location } = d
         const position = location.split(',').map(s => parseFloat(s))
@@ -56,14 +64,15 @@ export default function ({ devices: ds }) {
           lable: { content: 'd.udoi' },
         }
       })
+      // console.log(total)
       setDevices(total)
 
-      let polyline = people.map(p => {
-        let location: string = p.location
-        const position = location.split(',').map(s => parseFloat(s))
-        return { udoi: p.udoi, location: [{ longitude: position[0], latitude: position[1] }] }
-      })
-      setPolylines(polyline)
+      // let polyline = people.map(p => {
+      //   let location: string = p.location
+      //   const position = location.split(',').map(s => parseFloat(s))
+      //   return { udoi: p.udoi, location: [{ longitude: position[0], latitude: position[1] }] }
+      // })
+      // setPolylines(polyline)
 
       // const clientId = 'mqttjs_' + Math.random().toString(16).substr(2, 8)
 
@@ -156,10 +165,7 @@ export default function ({ devices: ds }) {
               return (
                 <div
                   style={{
-                    background:
-                      `url('http://icons.iconarchive.com/icons/paomedia/small-n-flat/1024/` +
-                      extData.data.avatarUrl +
-                      `')`,
+                    background: `url('https://img.icons8.com/glyph-neue/64/000000/` + extData.data.avatarUrl + `')`,
                     backgroundSize: 'contain',
                     backgroundRepeat: 'no-repeat',
                     backgroundPosition: 'center',
@@ -172,12 +178,12 @@ export default function ({ devices: ds }) {
           />
         )}
 
-        {polylines.length == 0
+        {/* {polylines.length == 0
           ? null
           : polylines.map(p => {
-              const polyline: any = p
-              return <Polyline path={polyline.location} />
-            })}
+            const polyline: any = p
+            return <Polyline path={polyline.location} />
+          })} */}
         {devices.length == 0
           ? null
           : devices.map(d => {

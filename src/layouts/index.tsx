@@ -14,6 +14,7 @@ const pathMap = {
   device: '资源',
   schema: '类型',
   application_context: '场景',
+  cloud: '日志',
 }
 
 export default function ({ children, location }) {
@@ -47,6 +48,14 @@ export default function ({ children, location }) {
             UDO-Board
           </Item>
           {items}
+          {/* {
+            <Item
+              key={'/log'}
+              onClick={() => history.push('/' + 'log')}
+              icon={<Icon type="icon-cloud" />}
+            >
+            </Item>
+          } */}
         </Menu>
       </Sider>
       <Layout>
