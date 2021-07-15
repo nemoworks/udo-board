@@ -11,7 +11,7 @@ export default function (schema) {
     case 'number':
       renders.push(schema.enum ? Select : Input)
       break
-    case 'boolean':
+    case 'bool':
       renders.push(Checkbox)
       break
     case 'date':

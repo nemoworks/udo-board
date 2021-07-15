@@ -73,6 +73,16 @@ export default function ({
 
   const [selectedUdoId, setSelectedUdoId] = useState('')
 
+  const [cxtAddId, setCxtAddId] = useState('')
+
+  useEffect(() => {
+    if (cxtAddId != '') {
+      const ns: string[] = [...names]
+      ns.push(cxtAddId)
+      setNames(ns)
+    }
+  }, [cxtAddId])
+
   useEffect(() => {
     // setDevices(devices.map(d => (d.id == editingDevice.id ? editingDevice : d)))
     if (Object.keys(filter).length != 0) {
@@ -189,9 +199,10 @@ export default function ({
                   for (let i of selectedRowKeys)
                     ApplicationContextRQ.addUdo(i, id).then(d => {
                       message.success('添加成功', 0.5)
-                      const ns: string[] = [...names]
-                      ns.push(i)
-                      setNames(ns)
+                      // const ns: string[] = [...names]
+                      // ns.push(i)
+                      // setNames(ns)
+                      setCxtAddId(i)
                     })
                   setSelectedRowKeys([])
                 }}
@@ -219,7 +230,7 @@ export default function ({
                   ])}
                 />
               </Modal>
-              <Dropdown
+              {/* <Dropdown
                 trigger={['click']}
                 overlay={
                   <Menu>
@@ -232,13 +243,13 @@ export default function ({
                 }
               >
                 <Icon type="icon-change" />
-              </Dropdown>
+              </Dropdown> */}
               {/* <Tooltip overlay="保存">
                 <Icon type="icon-store" onClick={updateApplicationContext} />
               </Tooltip> */}
-              <Tooltip overlay="消息过滤">
+              {/* <Tooltip overlay="消息过滤">
                 <Icon type="icon-template" onClick={_ => setOpen(!open)} />
-              </Tooltip>
+              </Tooltip> */}
             </>
           }
         >
