@@ -16,7 +16,7 @@ const pathMap = {
   device: '资源',
   schema: '类型',
   application_context: '场景',
-  cloud: '日志',
+  log: '日志',
 }
 
 export default function ({ children, location }) {
