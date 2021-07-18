@@ -5,6 +5,7 @@ import { DeviceRQ } from '@/requests'
 import mqtt from 'mqtt'
 // import { BaiduMap, Marker, Label, MarkerClusterer, Polyline, Icon } from 'react-baidu-maps';
 import { Map, Markers, Polyline, Circle, InfoWindow } from 'react-amap'
+import { Button, Cascader } from 'antd'
 import './index.less'
 
 export default function ({ devices: ds }) {
@@ -15,6 +16,9 @@ export default function ({ devices: ds }) {
   const [connectionStatus, setConnectionStatus] = useState(false)
   const [messages, setMessages] = useState([])
   const [polylines, setPolylines] = useState([])
+
+  const [center, setCenter] = useState({ longitude: 116.402544, latitude: 39.928216 })
+  const [zoom, setZoom] = useState(4)
 
   useEffect(() => {
     if (ds.length != 0) {
@@ -137,8 +141,14 @@ export default function ({ devices: ds }) {
     <div style={{ width: '100%', height: '100%' }}>
       <Map
         amapkey={'c4682e400c06b2b8be5e65b99c6404f5'}
-        zoom={4}
-        center={{ longitude: 116.402544, latitude: 39.928216 }}
+        zoom={zoom}
+        center={center}
+        events={{
+          click: e => {
+            // console.log(e.target.getZoom())
+            // console.log(e.target.getCenter())
+          },
+        }}
       >
         {devices.length == 0 ? null : (
           <Markers
@@ -204,7 +214,60 @@ export default function ({ devices: ds }) {
           }
           }
         /> */}
+        <div className="customLayer" style={{ position: 'absolute', right: '10px', bottom: '15px' }}>
+          {/* <Button onClick={() => { alert('You Clicked!') }}>An Ant Design Button</Button> */}
+          <Cascader
+            popupPlacement="topRight"
+            options={options}
+            onChange={(value, selectedOptions) => {
+              // console.log(selectedOptions)
+              if (selectedOptions != undefined && selectedOptions.length != 0) {
+                const lastIndex = selectedOptions.length - 1
+                setCenter(selectedOptions[lastIndex].position)
+                setZoom(selectedOptions[lastIndex].zoom)
+              }
+            }}
+            changeOnSelect
+          />
+        </div>
       </Map>
     </div>
   )
 }
+
+const options = [
+  {
+    value: 'zhejiang',
+    label: 'Zhejiang',
+    position: { longitude: 120.071463, latitude: 29.364877 },
+    zoom: 7,
+    children: [
+      {
+        value: 'hangzhou',
+        label: 'Hanzhou',
+        position: { longitude: 120.231161, latitude: 30.224716 },
+        zoom: 11,
+      },
+      {
+        value: 'jiaxing',
+        label: 'jiaxing',
+        position: { longitude: 120.747347, latitude: 30.757822 },
+        zoom: 11,
+      },
+    ],
+  },
+  {
+    value: 'jiangsu',
+    label: 'Jiangsu',
+    position: { longitude: 119.012827, latitude: 32.858301 },
+    zoom: 7,
+    children: [
+      {
+        value: 'nanjing',
+        label: 'Nanjing',
+        position: { longitude: 118.816672, latitude: 32.085536 },
+        zoom: 11,
+      },
+    ],
+  },
+]

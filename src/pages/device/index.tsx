@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { history } from 'umi'
-import { Card, Table, Tag, Dropdown, Menu, message, Tooltip, Modal, Select, Radio } from 'antd'
+import { Card, Table, Tag, Dropdown, Menu, message, Tooltip, Modal, Select, Radio, Row, Col } from 'antd'
 import { Input } from '@material-ui/core'
 import dayjs from 'dayjs'
-import { Icon, Page, Map, Graph, GraphQL } from '@/components'
+import { Icon, Page, Map, Graph, GraphQL, DashBoard } from '@/components'
 import { DeviceRQ, SchemaRQ } from '@/requests'
 import { generateColumns, getLocation } from '@/utils'
 import './index.less'
@@ -53,7 +53,16 @@ const viewModes = {
   map: {
     name: '地图',
     render({ deleteById, devices }) {
-      return <Map devices={devices} />
+      return (
+        <Row className="rows">
+          <Col style={{ height: '100%' }} span={14}>
+            <DashBoard devices={devices} />
+          </Col>
+          <Col style={{ height: '100%' }} span={10}>
+            <Map devices={devices} />
+          </Col>
+        </Row>
+      )
     },
   },
   graphQL: {

@@ -8,5 +8,6 @@ import Graph from './Graph'
 import QueryBuilder from './QueryBuilder'
 import Filter from './Filter'
 import GraphQL from './GraphQL'
+import DashBoard from './DashBoard'
 
-export { Icon, Page, XForm, DeviceCard, DeviceSelection, Map, Graph, QueryBuilder, Filter, GraphQL }
+export { Icon, Page, XForm, DeviceCard, DeviceSelection, Map, Graph, QueryBuilder, Filter, GraphQL, DashBoard }
