@@ -9,11 +9,12 @@ export default function (schema) {
   switch (schema.type) {
     case 'string':
     case 'number':
+    case 'bool':
       renders.push(schema.enum ? Select : Input)
       break
-    case 'bool':
-      renders.push(Checkbox)
-      break
+    // case 'bool':
+    //   renders.push(Checkbox)
+    //   break
     case 'date':
       renders.push(DatePicker)
       break
