@@ -6,6 +6,42 @@ import dayjs from 'dayjs'
 import { Icon, Page } from '@/components'
 import { ApplicationContextRQ } from '@/requests'
 import { generateColumns } from '@/utils'
+import { Button, Avatar } from 'antd'
+
+const data = [
+  {
+    title: '会议安排',
+    avatar: require('/src/assets/applications/huiyi.png'),
+    description: '0.2.1',
+    diagram: require('/src/assets/diagrams/huiyi.png'),
+  },
+  {
+    title: '智慧城管',
+    avatar: require('/src/assets/applications/chengshi.png'),
+    description: '1.2.11',
+    diagram: require('/src/assets/diagrams/chengshi.png'),
+  },
+  {
+    title: '家装设计',
+    avatar: require('/src/assets/applications/jiazhuangsheji.png'),
+    description: '3.0.8',
+  },
+  {
+    title: '来一杯咖啡',
+    avatar: require('/src/assets/applications/kafei.png'),
+    description: '8.6.0',
+  },
+  {
+    title: '看漫画',
+    avatar: require('/src/assets/applications/manhua.png'),
+    description: '5.0.3',
+  },
+  {
+    title: '智能画室',
+    avatar: require('/src/assets/applications/shuhuashi.png'),
+    description: '3.0.8',
+  },
+]
 
 export default function () {
   const [searchText, setSearchText] = useState('')
@@ -18,6 +54,40 @@ export default function () {
     ApplicationContextRQ.getAll().then(setApplicationContexts)
   }, [])
   //console.log('applicationContexts', applicationContexts)
+  const modalColumns = [
+    {
+      title: '应用名称',
+      dataIndex: 'title',
+      render: (text: string, record: any, index: number) => (
+        <>
+          <Avatar src={record.avatar} shape="square" size="small" style={{ marginRight: '10px' }} />
+          <span>{text}</span>
+        </>
+      ),
+    },
+    {
+      title: '',
+      dataIndex: '',
+      render: (text: string, record: any, index: number) => (
+        <Button
+          size="small"
+          type="primary"
+          onClick={() => {
+            const APName = record.title + '-' + Math.random().toString(16).substr(2, 8)
+            console.log(APName)
+            setVisible(false)
+            ApplicationContextRQ.create(APName).then(u => {
+              message.success('创建成功', 0.5)
+              history.push('/application_context/' + u)
+            })
+          }}
+        >
+          创建
+        </Button>
+      ),
+    },
+  ]
+
   const columns = generateColumns([
     ['创建时间', 'createOn', (text: string) => <a>{dayjs(text).format('YYYY/MM/DD hh:mm:ss')}</a>],
     ['场景名称', 'name', (text: string, record: any, index: number) => <span>{record.id}</span>],
@@ -44,11 +114,11 @@ export default function () {
   ])
 
   return (
-    <Page className="application_context" title="UDO-Board | 场景管理">
+    <Page className="application_context" title="UDO-Board | 应用实例管理">
       <Card
         title={
           <>
-            <span className="text">场景</span>
+            <span className="text">应用实例</span>
           </>
         }
         extra={
@@ -58,21 +128,21 @@ export default function () {
               onCancel={_ => setVisible(false)}
               onOk={_ => {
                 setVisible(false)
-                // console.log(contextName)
-                ApplicationContextRQ.create(contextName).then(u => {
-                  message.success('创建成功', 0.5)
-                  history.push('/application_context/' + u)
-                })
+
+                // ApplicationContextRQ.create(contextName).then(u => {
+                //   message.success('创建成功', 0.5)
+                //   history.push('/application_context/' + u)
+                // })
               }}
             >
-              <span>ContextName: </span>
-              <Input value={contextName} onChange={e => setContextName(e.target.value)} />
+              <Table size="small" rowKey="title" columns={modalColumns} dataSource={data} />
             </Modal>
             <Icon type="icon-create" onClick={_ => setVisible(true)} />
           </>
         }
       >
         <Table
+          style={{ marginTop: '10px' }}
           rowSelection={{
             type: 'checkbox',
             onChange: setSelectedRowKeys as any,

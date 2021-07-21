@@ -15,7 +15,7 @@ const pathMap = {
   property: '资产',
   device: '资源',
   schema: '类型',
-  application_context: '场景',
+  application_context: '应用实例',
   log: '日志',
 }
 

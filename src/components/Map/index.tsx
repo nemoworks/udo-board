@@ -239,19 +239,19 @@ export default function ({ devices: ds }) {
 const options = [
   {
     value: 'zhejiang',
-    label: 'Zhejiang',
+    label: '浙江',
     position: { longitude: 120.071463, latitude: 29.364877 },
     zoom: 7,
     children: [
       {
         value: 'hangzhou',
-        label: 'Hanzhou',
+        label: '杭州',
         position: { longitude: 120.231161, latitude: 30.224716 },
         zoom: 11,
       },
       {
         value: 'jiaxing',
-        label: 'jiaxing',
+        label: '嘉兴',
         position: { longitude: 120.747347, latitude: 30.757822 },
         zoom: 11,
       },
@@ -259,19 +259,19 @@ const options = [
   },
   {
     value: 'jiangsu',
-    label: 'Jiangsu',
+    label: '江苏',
     position: { longitude: 119.012827, latitude: 32.858301 },
     zoom: 7,
     children: [
       {
         value: 'nanjing',
-        label: 'Nanjing',
+        label: '南京',
         position: { longitude: 118.816672, latitude: 32.085536 },
         zoom: 11,
         children: [
           {
             value: 'NJU',
-            label: 'NJU',
+            label: '南京大学',
             position: { longitude: 118.96, latitude: 32.119 },
             zoom: 15,
           },
