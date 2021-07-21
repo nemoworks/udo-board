@@ -1,6 +1,6 @@
 import axios from 'axios'
 import dayjs from 'dayjs'
-import { getRequest, getReponse } from '@/utils'
+import { getRequest, getReponse, Encrypt, Decrypt } from '@/utils'
 
 export default {
   async getAll(schemas: any[]) {
@@ -44,6 +44,11 @@ export default {
         data.push({ ...i, schema, data: i })
       }
     }
+    // for (let d of data) {
+    //   console.log(d.data.avatarUrl)
+    //   console.log(Decrypt(d.data.avatarUrl))
+    // }
+
     console.log(data)
     return data
   },
@@ -81,6 +86,8 @@ export default {
 
   async createFromUrl(uri: string, name: string, location: string, avatarUrl: string, uriType: string = 'HTTP') {
     console.log(uri, name, location, avatarUrl, uriType)
+    const encode = Encrypt(avatarUrl)
+    console.log('encode', encode)
     const position = location.split(',').map(s => parseFloat(s))
     const { data } = await axios.request({
       method: 'POST',
@@ -90,7 +97,7 @@ export default {
         name,
         longitude: position[0],
         latitude: position[1],
-        avatarUrl,
+        avatarUrl: encode,
         uriType,
       },
     })
@@ -130,7 +137,11 @@ export default {
   async update(content: any, id: string, schemaId: string, schema: any) {
     const { title, properties } = schema
     // let location: string = content.location
-
+    if (Object.keys(content).find(e => e == 'avatarUrl')) {
+      const { avatarUrl } = content
+      content = { ...content, avatarUrl: Encrypt(avatarUrl) }
+    }
+    console.log('content', content)
     const response = Object.keys(properties).join('\n')
     // delete content['location']
     let request = JSON.stringify(content).replaceAll(',', '\n')

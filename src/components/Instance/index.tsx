@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Table, Tag, Space } from 'antd'
+import './index.less'
 
 const columns = [
   {
@@ -13,59 +14,54 @@ const columns = [
 ]
 const data = [
   {
-    name: 'instance1',
-    link: '0/0/1',
+    name: 'office-jkssgyc',
+    link: '2/0/2',
   },
   {
-    name: 'instance2',
-    link: '0/1/1',
+    name: 'office-p383jsl',
+    link: '1/1/1',
   },
   {
-    name: 'instance3',
+    name: 'city-bx21bdjk',
+    link: '3/0/3',
+  },
+  {
+    name: 'city-a812jkm',
+    link: '2/1/5',
+  },
+  {
+    name: 'city-gms23bizq',
+    link: '5/0/8',
+  },
+  {
+    name: 'coffee-p213nda',
     link: '2/0/1',
   },
   {
-    name: 'instance4',
-    link: '2/0/1',
+    name: 'coffee-b8sabd2k',
+    link: '3/2/8',
   },
   {
-    name: 'instance5',
-    link: '2/0/1',
-  },
-  {
-    name: 'instance6',
-    link: '2/0/1',
-  },
-  {
-    name: 'instance7',
-    link: '2/0/1',
-  },
-  {
-    name: 'instance8',
-    link: '2/0/1',
-  },
-  {
-    name: 'instance9',
-    link: '2/0/1',
-  },
-  {
-    name: 'instance10',
-    link: '2/0/1',
-  },
-  {
-    name: 'instance11',
-    link: '2/0/1',
+    name: 'book-i2haa29x',
+    link: '4/0/1',
   },
 ]
 
-export default function () {
+export default function ({}) {
   return (
     <Table
-      style={{ height: '100%', overflow: 'scroll' }}
+      className="instance-table"
+      bordered={true}
       columns={columns}
       dataSource={data}
       pagination={false}
-      size="small"
+      onRow={record => {
+        return {
+          onClick: event => {
+            console.log(record)
+          }, // 点击行
+        }
+      }}
     />
   )
 }

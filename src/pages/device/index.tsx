@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
 import { history } from 'umi'
-import { Card, Table, Tag, Dropdown, Menu, message, Tooltip, Modal, Select, Radio, Row, Col } from 'antd'
+import { Card, Table, Tag, Dropdown, Menu, message, Tooltip, Modal, Select, Radio, Row, Col, Image } from 'antd'
 import { Input } from '@material-ui/core'
 import dayjs from 'dayjs'
 import { Icon, Page, Map, Graph, GraphQL, DashBoard } from '@/components'
 import { DeviceRQ, SchemaRQ } from '@/requests'
 import { generateColumns, getLocation } from '@/utils'
+import { useModel } from 'umi'
 import './index.less'
 
 const { Item } = Menu
@@ -52,11 +53,11 @@ const viewModes = {
   },
   map: {
     name: '地图',
-    render({ deleteById, devices }) {
+    render({ deleteById, devices, displayDiagram }) {
       return (
         <Row className="rows">
           <Col style={{ height: '100%' }} span={14}>
-            <DashBoard devices={devices} />
+            <DashBoard devices={devices} displayDiagram={displayDiagram} />
           </Col>
           <Col style={{ height: '100%' }} span={10}>
             <Map devices={devices} />
@@ -73,7 +74,7 @@ const viewModes = {
   },
 }
 
-export default function () {
+export default function ({ setLayoutDisplay }) {
   const [searchText, setSearchText] = useState('')
 
   const [schemas, setSchemas] = useState<any[]>([])
@@ -104,6 +105,17 @@ export default function () {
   const [createLat, setCreateLat] = useState('')
   const [value, setValue] = useState(1)
 
+  const [diagramModal, setDiagramModal] = useState(false)
+  const [diagramSrc, setDiagramSrc] = useState('')
+
+  const [createSelectLength, setCreateSelectLength] = useState('250px')
+
+  const [layoutDisplayVisible, setLayoutDisplayVisible] = useState(true)
+
+  const { setLayoutVisible } = useModel('layoutVisible', ret => ({
+    setLayoutVisible: ret.setLayoutVisible,
+  }))
+
   useEffect(() => {
     SchemaRQ.getAll().then(s => {
       setSchemas(s)
@@ -132,6 +144,13 @@ export default function () {
   //   }
 
   // }, [schemas])
+
+  function displayDiagram(data: any) {
+    if (Object.keys(data).find(k => k == 'diagram')) {
+      setDiagramSrc(data.diagram)
+      setDiagramModal(true)
+    }
+  }
 
   function deleteById(record: any) {
     DeviceRQ.delete(record).then(_ => {
@@ -215,27 +234,40 @@ export default function () {
                 create()
               }}
             >
-              <table>
+              <table className="device-import-modal">
                 <tr>
                   <td>
-                    <span>导入方式: </span>
+                    <span>推导类型: </span>
                   </td>
                   <td>
-                    <Select value={createType} onChange={t => setCreateType(t)}>
+                    {/* <Select style={{ fontSize: 'small' }} value={createType} onChange={t => setCreateType(t)}>
                       {['schema', 'url'].map(t => (
                         <Select.Option key={t} value={t}>
                           {t}
                         </Select.Option>
                       ))}
-                    </Select>
+                    </Select> */}
+                    <Radio.Group
+                      onChange={e => {
+                        setCreateType(e.target.value)
+                      }}
+                      value={createType}
+                    >
+                      <Radio style={{ fontSize: 'small' }} value={'url'}>
+                        是
+                      </Radio>
+                      <Radio style={{ fontSize: 'small' }} value={'schema'}>
+                        否
+                      </Radio>
+                    </Radio.Group>
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <span>gatewayType: </span>
+                    <span>协议: </span>
                   </td>
                   <td>
-                    <Select value={gatewayType} onChange={t => setGatewayType(t)}>
+                    <Select style={{ fontSize: 'small' }} value={gatewayType} onChange={t => setGatewayType(t)}>
                       {['HTTP', 'MQTT'].map(t => (
                         <Select.Option key={t} value={t}>
                           {t}
@@ -247,10 +279,17 @@ export default function () {
                 {createType == 'schema' ? (
                   <tr>
                     <td>
-                      <span>schema:</span>
+                      <span>资源模型:</span>
                     </td>
                     <td>
-                      <Select value={createSchema} onChange={s => setCreateSchema(s)}>
+                      <Select
+                        style={{ width: createSelectLength, fontSize: 'small' }}
+                        value={createSchema}
+                        onChange={s => {
+                          setCreateSchema(s)
+                          setCreateSelectLength('auto')
+                        }}
+                      >
                         {schemas.map(s => (
                           <Select.Option key={s.id} value={s.id}>
                             {s.schema.title + '/' + s.id}
@@ -264,7 +303,7 @@ export default function () {
                   <>
                     <tr>
                       <td>
-                        <span>name:</span>
+                        <span>类型名称:</span>
                       </td>
                       <td>
                         <Input value={createName} onChange={e => setCreateName(e.target.value)}></Input>
@@ -272,7 +311,7 @@ export default function () {
                     </tr>
                     <tr>
                       <td>
-                        <span>avatarUrl:</span>
+                        <span>图标地址:</span>
                       </td>
                       <td>
                         <Input value={createAvatarUrl} onChange={e => setCreateAvatarUrl(e.target.value)}></Input>
@@ -282,7 +321,7 @@ export default function () {
                 ) : null}
                 <tr>
                   <td>
-                    <span>url:</span>
+                    <span>资源地址:</span>
                   </td>
                   <td>
                     <Input value={createUrl} onChange={e => setCreateUrl(e.target.value)}></Input>
@@ -290,7 +329,7 @@ export default function () {
                 </tr>
                 <tr>
                   <td>
-                    <span>填写location:</span>
+                    <span>位置:</span>
                   </td>
                   <td>
                     <Radio.Group
@@ -299,8 +338,12 @@ export default function () {
                       }}
                       value={value}
                     >
-                      <Radio value={1}>是</Radio>
-                      <Radio value={0}>否</Radio>
+                      <Radio style={{ fontSize: 'small' }} value={1}>
+                        是
+                      </Radio>
+                      <Radio style={{ fontSize: 'small' }} value={0}>
+                        否
+                      </Radio>
                     </Radio.Group>
                   </td>
                 </tr>
@@ -341,6 +384,30 @@ export default function () {
             >
               <Icon type="icon-change" />
             </Dropdown>
+
+            <Modal
+              visible={diagramModal}
+              width={700}
+              onCancel={_ => setDiagramModal(false)}
+              onOk={_ => {
+                setDiagramModal(false)
+              }}
+              bodyStyle={{ textAlign: 'center' }}
+            >
+              <Image
+                width={600}
+                src={diagramSrc}
+                alt="diagram"
+                fallback="data:image/png;base64,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"
+              />
+            </Modal>
+            <Icon
+              type={layoutDisplayVisible ? 'icon-fangda' : 'icon-suoxiao'}
+              onClick={_ => {
+                setLayoutVisible(!layoutDisplayVisible)
+                setLayoutDisplayVisible(!layoutDisplayVisible)
+              }}
+            ></Icon>
             {/* <Input value={sourceUrl} onChange={e => setSourceUrl(e.target.value)} />
             <Tooltip overlay="URL 导入">
               <Icon type="icon-import" onClick={_ => sourceUrl !== '' && setVisible(true)} />
@@ -396,6 +463,7 @@ export default function () {
         {viewModes[mode].render({
           deleteById,
           devices,
+          displayDiagram,
         })}
       </Card>
     </Page>

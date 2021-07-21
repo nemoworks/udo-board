@@ -22,8 +22,18 @@ const pathMap = {
 export default function ({ children, location }) {
   const [collapse, setCollapse] = useState(true)
 
+  const [layoutDisplay, setLayoutDisplay] = useState(true)
+
+  const { setLog } = useModel('log', ret => ({
+    setLog: ret.setLog,
+  }))
+
+  const { layoutVisible } = useModel('layoutVisible', ret => ({
+    layoutVisible: ret.layoutVisible,
+  }))
+
   const path = Object.keys(pathMap).find(key => key !== '' && location.pathname.startsWith('/' + key))
-  const { initialState, loading, error, refresh, setInitialState } = useModel('@@initialState')
+  // const { initialState, setInitialState } = useModel('@@initialState')
   const items = Object.keys(pathMap).map(path => {
     return (
       <Item
@@ -37,63 +47,72 @@ export default function ({ children, location }) {
   })
 
   useEffect(() => {
-    let init = initialState
-    const clientId = 'mqttclient'
+    setLayoutDisplay(layoutVisible)
+  }, [layoutVisible])
 
-    const host = 'ws://broker.emqx.io:8083/mqtt'
-    // const host = 'ws://210.28.134.32:1884/mqtt'
-    const subTopic = 'topic/log'
+  // useEffect(() => {
+  //   let init = ''
+  //   // if (initialState != undefined) {
+  //   //   init = initialState
+  //   // }
+  //   const clientId = 'mqttclient'
 
-    const options = {
-      keepalive: 60,
-      clientId: clientId,
-      protocolId: 'MQTT',
-      protocolVersion: 4,
-      clean: true,
-      reconnectPeriod: 1000,
-      connectTimeout: 30 * 1000,
-      // username: 'udo-user',
-      // password: '123456',
-    }
+  //   const host = 'ws://broker.emqx.io:8083/mqtt'
+  //   // const host = 'ws://210.28.134.32:1884/mqtt'
+  //   const subTopic = 'topic/log'
 
-    console.log('Connecting mqtt client')
-    const client = mqtt.connect(host, options)
+  //   const options = {
+  //     keepalive: 60,
+  //     clientId: clientId,
+  //     protocolId: 'MQTT',
+  //     protocolVersion: 4,
+  //     clean: true,
+  //     reconnectPeriod: 1000,
+  //     connectTimeout: 30 * 1000,
+  //     // username: 'udo-user',
+  //     // password: '123456',
+  //   }
 
-    client.on('error', err => {
-      console.log('Connection error: ', err)
-      client.end()
-    })
+  //   console.log('Connecting mqtt client')
+  //   const client = mqtt.connect(host, options)
 
-    client.on('reconnect', () => {
-      console.log('Reconnecting...')
-    })
-    client.on('connect', () => {
-      console.log('Client connected:' + clientId)
-      // Subscribe
-      // client.subscribe('topic/test', { qos: 0 })
-      client.subscribe(subTopic, { qos: 0 })
-    })
-    client.on('message', (topic, message, packet) => {
-      const m = message.toString()
-      init = init + m + '\n'
-      setInitialState(init)
-    })
+  //   client.on('error', err => {
+  //     // console.log('Connection error: ', err)
+  //     client.end()
+  //   })
 
-    // return () => {
-    //   client.unsubscribe(subTopic, () => {
-    //     console.log('Unsubscribed')
-    //   })
-    //   client.end(true, () => {
-    //     console.log('mqtt end')
-    //   })
-    // }
-  }, [])
+  //   client.on('reconnect', () => {
+  //     console.log('Reconnecting...')
+  //   })
+  //   client.on('connect', () => {
+  //     console.log('Client connected:' + clientId)
+  //     // Subscribe
+  //     // client.subscribe('topic/test', { qos: 0 })
+  //     client.subscribe(subTopic, { qos: 0 })
+  //   })
+  //   client.on('message', (topic, message, packet) => {
+  //     const m = message.toString()
+  //     init = init + m + '\n'
+  //     setLog(init)
+  //     console.log('init', init)
+  //     // setInitialState(init)
+  //   })
+
+  //   // return () => {
+  //   //   client.unsubscribe(subTopic, () => {
+  //   //     console.log('Unsubscribed')
+  //   //   })
+  //   //   client.end(true, () => {
+  //   //     console.log('mqtt end')
+  //   //   })
+  //   // }
+  // }, [])
 
   // console.log('init', initialState)
 
   return (
     <Layout>
-      <Sider collapsible trigger={null} collapsed={collapse}>
+      <Sider collapsible trigger={null} collapsed={collapse} style={{ display: layoutDisplay ? 'block' : 'none' }}>
         <Menu mode="inline">
           <Item
             className="logo"
@@ -108,7 +127,7 @@ export default function ({ children, location }) {
         </Menu>
       </Sider>
       <Layout>
-        <Header>
+        <Header style={{ display: layoutDisplay ? 'block' : 'none' }}>
           <Icon type={'icon-' + (path ?? 'home')} />
           <span className="text">{pathMap[path ?? '']}</span>
         </Header>

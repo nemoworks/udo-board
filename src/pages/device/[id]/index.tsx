@@ -3,6 +3,7 @@ import { Card, Tooltip, Select, message } from 'antd'
 import { Input } from '@material-ui/core'
 import { Page, Icon, XForm } from '@/components'
 import { DeviceRQ, SchemaRQ, UserRQ } from '@/requests'
+import { Decrypt } from '@/utils'
 
 const { Option } = Select
 
@@ -36,6 +37,10 @@ export default function ({
     DeviceRQ.getById(id).then(({ id, data, type: { id: schemaId, schema } }) => {
       // console.log(id, data, schemaId, schema)
       setName(id)
+      if (Object.keys(data).find(e => e == 'avatarUrl')) {
+        const { avatarUrl } = data
+        data = { ...data, avatarUrl: Decrypt(avatarUrl) }
+      }
       setContent(data)
       setSchema(schema)
       setSchemaId(schemaId)

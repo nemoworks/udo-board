@@ -6,6 +6,7 @@ import mqtt from 'mqtt'
 // import { BaiduMap, Marker, Label, MarkerClusterer, Polyline, Icon } from 'react-baidu-maps';
 import { Map, Markers, Polyline, Circle, InfoWindow } from 'react-amap'
 import { Button, Cascader } from 'antd'
+import { Decrypt } from '@/utils'
 import './index.less'
 
 export default function ({ devices: ds }) {
@@ -175,7 +176,7 @@ export default function ({ devices: ds }) {
               return (
                 <div
                   style={{
-                    background: `url('https://img.icons8.com/glyph-neue/64/000000/` + extData.data.avatarUrl + `')`,
+                    background: `url('` + Decrypt(extData.data.avatarUrl) + `')`,
                     backgroundSize: 'contain',
                     backgroundRepeat: 'no-repeat',
                     backgroundPosition: 'center',
@@ -267,6 +268,14 @@ const options = [
         label: 'Nanjing',
         position: { longitude: 118.816672, latitude: 32.085536 },
         zoom: 11,
+        children: [
+          {
+            value: 'NJU',
+            label: 'NJU',
+            position: { longitude: 118.96, latitude: 32.119 },
+            zoom: 15,
+          },
+        ],
       },
     ],
   },

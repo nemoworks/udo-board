@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Card } from 'antd'
 import ResourceUsage from '../ResourceUsage'
+import './index.less'
 
 const tabList = [
   {
@@ -41,6 +42,7 @@ export default function () {
 
   return (
     <Card
+      className="resource-charts-card"
       tabList={tabList}
       activeTabKey={tabKey}
       onTabChange={key => {

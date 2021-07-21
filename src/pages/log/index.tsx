@@ -7,12 +7,21 @@ import mqtt from 'mqtt'
 import { useModel } from 'umi'
 
 export default function () {
-  const { initialState, loading, error, refresh, setInitialState } = useModel('@@initialState')
+  // const { initialState, loading, error, refresh, setInitialState } = useModel('@@initialState')
   const [code, setCode] = useState<string>('')
-
+  const { log } = useModel('log', ret => ({
+    log: ret.log,
+  }))
   useEffect(() => {
-    setCode(initialState)
-  }, [initialState])
+    setCode(log)
+  }, [log])
+
+  // useEffect(() => {
+  //   if (initialState != undefined) {
+  //     setCode(initialState)
+  //   }
+
+  // }, [initialState])
 
   return (
     <Page className="log" title="UDO-Board | 日志">

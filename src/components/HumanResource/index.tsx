@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Card } from 'antd'
 import { Chart } from '@antv/g2'
+import './index.less'
 
 export default function () {
   useEffect(() => {
@@ -17,7 +18,7 @@ export default function () {
     const chart = new Chart({
       container: 'humancontainer',
       autoFit: true,
-      height: 110,
+      height: 150,
       width: 100,
     })
     chart.forceFit()
@@ -44,8 +45,8 @@ export default function () {
   }, [])
 
   return (
-    <Card title="人力资源">
-      <div style={{ width: '100%', height: '100%', padding: '10px' }} id="humancontainer"></div>
+    <Card className="human-resource-card" title="人力资源">
+      <div style={{ width: '90%', margin: '5px' }} id="humancontainer"></div>
     </Card>
   )
 }

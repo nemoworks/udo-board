@@ -5,95 +5,46 @@ import './index.less'
 
 const data = [
   {
-    title: 'Title 1',
-    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+    title: '咖啡机',
+    avatar: require('/src/assets/devices/Coffee_Maker.png'),
     count: 1,
   },
   {
-    title: 'Title 2',
-    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+    title: '打印机',
+    avatar: require('/src/assets/devices/DevicesNetwork_pr.png'),
     count: 12,
   },
   {
-    title: 'Title 3',
-    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+    title: '风扇',
+    avatar: require('/src/assets/devices/fan.png'),
     count: 6,
   },
   {
-    title: 'Title 4',
-    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+    title: '台灯',
+    avatar: require('/src/assets/devices/light.png'),
     count: 9,
   },
   {
-    title: 'Title 4',
-    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    count: 99,
-  },
-  {
-    title: 'Title 3',
-    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    count: 12,
-  },
-  {
-    title: 'Title 4',
-    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    count: 199,
-  },
-  {
-    title: 'Title 4',
-    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    count: 0,
-  },
-  {
-    title: 'Title 1',
-    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    count: 1,
-  },
-  {
-    title: 'Title 2',
-    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    count: 12,
-  },
-  {
-    title: 'Title 3',
-    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    count: 6,
-  },
-  {
-    title: 'Title 4',
-    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    count: 9,
-  },
-  {
-    title: 'Title 4',
-    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    count: 99,
-  },
-  {
-    title: 'Title 3',
-    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    count: 12,
-  },
-  {
-    title: 'Title 4',
-    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+    title: '监控器',
+    avatar: require('/src/assets/devices/monitor.png'),
     count: 199,
   },
 ]
 
 export default function () {
   return (
-    <Card title="物理资源">
+    <Card className="device-recource-card" title="物理资源">
       <List
         grid={{ gutter: 0, column: 4 }}
         dataSource={data}
         renderItem={item => (
-          <List.Item className="devicerecource">
-            <Badge count={item.count}>
+          <List.Item className="device-recource-list-item">
+            <Badge count={item.count} size="small">
               <Avatar
                 src={item.avatar}
                 icon={<UserOutlined />}
-                size={{ xs: 12, sm: 16, md: 26, lg: 32, xl: 40, xxl: 64 }}
+                size={{ xs: 10, sm: 14, md: 20, lg: 26, xl: 36, xxl: 50 }}
+                shape="square"
               />
             </Badge>
           </List.Item>

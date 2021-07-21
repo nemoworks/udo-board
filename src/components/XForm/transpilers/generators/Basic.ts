@@ -10,6 +10,7 @@ export default function (schema) {
     case 'string':
     case 'number':
     case 'bool':
+    case 'Link':
       renders.push(schema.enum ? Select : Input)
       break
     // case 'bool':
@@ -18,8 +19,8 @@ export default function (schema) {
     case 'date':
       renders.push(DatePicker)
       break
-    case 'link':
-      renders.push(Link)
-      break
+    // case 'link':
+    //   renders.push(Link)
+    //   break
   }
 }

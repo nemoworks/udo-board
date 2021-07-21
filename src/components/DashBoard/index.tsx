@@ -9,8 +9,7 @@ import ApplicationList from '../ApplicationList'
 import Instance from '../Instance'
 import InstanceStatistics from '../InstanceStatistics'
 
-export default function ({ devices }) {
-  console.log('Databoard', devices)
+export default function ({ devices, displayDiagram }) {
   return (
     // <div style={{ width: '100%', height: '100%' }}>
     //     <Row className="row">
@@ -29,14 +28,14 @@ export default function ({ devices }) {
     // </div>
     <div style={{ width: '100%', height: '100%' }}>
       <Row className="row">
-        <Col style={{ height: '100%' }} span={8}>
-          <ApplicationList />
+        <Col style={{ height: '100%' }} span={7}>
+          <ApplicationList displayDiagram={displayDiagram} />
         </Col>
-        <Col style={{ height: '100%' }} span={8}>
-          <Instance />
-        </Col>
-        <Col style={{ height: '100%' }} span={8}>
+        <Col style={{ height: '100%' }} span={7}>
           <InstanceStatistics />
+        </Col>
+        <Col style={{ height: '100%' }} span={10}>
+          <Instance />
         </Col>
       </Row>
       <Row className="row">
