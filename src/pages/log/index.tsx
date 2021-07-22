@@ -1,7 +1,6 @@
 import { Page } from '@/components'
 import CodeMirror from '@uiw/react-codemirror'
-import 'codemirror/keymap/sublime'
-import 'codemirror/theme/monokai.css'
+import 'codemirror/theme/rubyblue.css'
 import { useState, useEffect } from 'react'
 import mqtt from 'mqtt'
 import { useModel } from 'umi'
@@ -28,12 +27,9 @@ export default function () {
       <CodeMirror
         value={code}
         options={{
-          theme: 'monokai',
-          keyMap: 'sublime',
-          tabsize: 0,
+          theme: 'rubyblue',
           mode: 'jsx',
           readOnly: true,
-          autofouse: true,
         }}
         onChange={(instance, change) => {
           // console.log('onChange', instance.getDoc())

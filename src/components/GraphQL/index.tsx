@@ -7,8 +7,7 @@ import './index.less'
 import { useState } from 'react'
 import { DeviceRQ } from '@/requests'
 import CodeMirror from '@uiw/react-codemirror'
-import 'codemirror/keymap/sublime'
-import 'codemirror/theme/monokai.css'
+import 'codemirror/theme/mdn-like.css'
 
 export default function () {
   const [query, setQuery] = useState('')
@@ -72,13 +71,12 @@ export default function () {
         <CodeMirror
           value={queryResult}
           options={{
-            theme: 'vs-light',
-            keyMap: 'sublime',
-            tabsize: 0,
+            theme: 'mdn-like',
             mode: 'jsx',
+            smartIndent: true,
             readOnly: true,
-            autofouse: true,
           }}
+
           // onChange={(instance, change) => {
           //   instance.scrollTo(0, instance.getDoc().height)
           // }}
