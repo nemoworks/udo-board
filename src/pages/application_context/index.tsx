@@ -10,33 +10,39 @@ import { Button, Avatar } from 'antd'
 
 const data = [
   {
+    id: 1,
     title: '会议安排',
     avatar: require('/src/assets/applications/huiyi.png'),
     description: '0.2.1',
     diagram: require('/src/assets/diagrams/huiyi.png'),
   },
   {
+    id: 2,
     title: '智慧城管',
     avatar: require('/src/assets/applications/chengshi.png'),
     description: '1.2.11',
     diagram: require('/src/assets/diagrams/chengshi.png'),
   },
   {
+    id: 3,
     title: '家装设计',
     avatar: require('/src/assets/applications/jiazhuangsheji.png'),
     description: '3.0.8',
   },
   {
+    id: 4,
     title: '来一杯咖啡',
     avatar: require('/src/assets/applications/kafei.png'),
     description: '8.6.0',
   },
   {
+    id: 5,
     title: '看漫画',
     avatar: require('/src/assets/applications/manhua.png'),
     description: '5.0.3',
   },
   {
+    id: 6,
     title: '智能画室',
     avatar: require('/src/assets/applications/shuhuashi.png'),
     description: '3.0.8',
@@ -125,17 +131,19 @@ export default function () {
           <>
             <Modal
               visible={visible}
+              footer={null}
               onCancel={_ => setVisible(false)}
-              onOk={_ => {
-                setVisible(false)
 
-                // ApplicationContextRQ.create(contextName).then(u => {
-                //   message.success('创建成功', 0.5)
-                //   history.push('/application_context/' + u)
-                // })
-              }}
+              // onOk={_ => {
+              //   setVisible(false)
+
+              //   // ApplicationContextRQ.create(contextName).then(u => {
+              //   //   message.success('创建成功', 0.5)
+              //   //   history.push('/application_context/' + u)
+              //   // })
+              // }}
             >
-              <Table size="small" rowKey="title" columns={modalColumns} dataSource={data} />
+              <Table style={{ marginTop: '20px' }} size="small" rowKey="id" columns={modalColumns} dataSource={data} />
             </Modal>
             <Icon type="icon-create" onClick={_ => setVisible(true)} />
           </>

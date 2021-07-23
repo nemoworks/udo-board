@@ -139,7 +139,7 @@ export default function ({ devices: ds }) {
   }, [ds])
 
   return (
-    <div style={{ width: '100%', height: '100%' }}>
+    <div style={{ width: '100%', height: '98.4%', marginTop: '9px' }}>
       <Map
         amapkey={'c4682e400c06b2b8be5e65b99c6404f5'}
         zoom={zoom}
@@ -201,6 +201,13 @@ export default function ({ devices: ds }) {
               const device: any = d
               if (device.schema.schema.title == 'human')
                 return <Circle center={device.position} radius={10} bubble={false} />
+            })}
+        {devices.length == 0
+          ? null
+          : devices.map(d => {
+              const device: any = d
+              if (device.schema.schema.title == 'room')
+                return <Circle center={device.position} radius={device.radius} bubble={false} />
             })}
         {/* <InfoWindow
           position={infoWindow.position}

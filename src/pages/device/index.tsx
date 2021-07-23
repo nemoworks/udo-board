@@ -212,6 +212,7 @@ export default function ({ setLayoutDisplay }) {
     <Page className="device" title="UDO-Board | 资源管理">
       <Card
         className={'mode-' + mode}
+        bordered={true}
         title={
           <>
             <span className="text">资源</span>
