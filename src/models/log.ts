@@ -43,7 +43,7 @@ export default () => {
       const m = message.toString()
       init = init + m + '\n'
       setLog(init)
-      console.log(init)
+      // console.log(init)
     })
   }, [])
 

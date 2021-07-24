@@ -135,6 +135,7 @@ export default {
   },
 
   async update(content: any, id: string, schemaId: string, schema: any) {
+    console.log(schema)
     const { title, properties } = schema
     // let location: string = content.location
     if (Object.keys(content).find(e => e == 'avatarUrl')) {

@@ -6,14 +6,14 @@ import './index.less'
 export default function () {
   useEffect(() => {
     const data = [
-      { province: '江苏', number: 38 },
-      { province: '浙江', number: 52 },
-      { province: '山东', number: 61 },
-      { province: '广东', number: 145 },
-      { province: '吉林', number: 48 },
+      { province: '江苏', number: 20 },
+      { province: '浙江', number: 145 },
+      { province: '山东', number: 39 },
+      { province: '广东', number: 37 },
+      { province: '吉林', number: 24 },
       { province: '黑龙江', number: 38 },
       { province: '北京', number: 38 },
-      { province: '上海', number: 38 },
+      { province: '上海', number: 33 },
     ]
     const chart = new Chart({
       container: 'humancontainer',

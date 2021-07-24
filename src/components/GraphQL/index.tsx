@@ -14,8 +14,7 @@ export default function () {
   const [queryResult, setQueryResult] = useState('')
   function graphQL() {
     DeviceRQ.grapgQL(query).then(d => {
-      // console.log(d)
-      setQueryResult(JSON.stringify(d))
+      setQueryResult(JSON.stringify(d, null, 2))
     })
   }
 

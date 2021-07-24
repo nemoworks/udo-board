@@ -101,8 +101,8 @@ export default function ({ setLayoutDisplay }) {
   const [createUrl, setCreateUrl] = useState('')
   const [createName, setCreateName] = useState('')
   const [createAvatarUrl, setCreateAvatarUrl] = useState('')
-  const [createLng, setCreateLng] = useState('')
-  const [createLat, setCreateLat] = useState('')
+  const [createLng, setCreateLng] = useState('0')
+  const [createLat, setCreateLat] = useState('0')
   const [value, setValue] = useState(1)
 
   const [diagramModal, setDiagramModal] = useState(false)
@@ -170,9 +170,9 @@ export default function ({ setLayoutDisplay }) {
   }, [location])
 
   function createFromUrl() {
-    if (value == 0) {
+    if (value == 1) {
       getLocation(createUrl, setLocation)
-    } else if (value == 1) {
+    } else if (value == 0) {
       DeviceRQ.createFromUrl(createUrl, createName, createLng + ',' + createLat, createAvatarUrl, gatewayType).then(
         d => {
           message.success('导入成功', 0.5)
@@ -340,15 +340,15 @@ export default function ({ setLayoutDisplay }) {
                       value={value}
                     >
                       <Radio style={{ fontSize: 'small' }} value={1}>
-                        是
+                        推导
                       </Radio>
                       <Radio style={{ fontSize: 'small' }} value={0}>
-                        否
+                        默认
                       </Radio>
                     </Radio.Group>
                   </td>
                 </tr>
-                {value == 1 ? (
+                {value == 0 ? (
                   <>
                     <tr>
                       <td>

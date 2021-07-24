@@ -147,7 +147,7 @@ export default function ({ devices: ds }) {
         events={{
           click: e => {
             // console.log(e.target.getZoom())
-            // console.log(e.target.getCenter())
+            console.log(e.target.getCenter())
           },
         }}
       >
@@ -195,19 +195,27 @@ export default function ({ devices: ds }) {
             const polyline: any = p
             return <Polyline path={polyline.location} />
           })} */}
-        {devices.length == 0
+        {/* {devices.length == 0
           ? null
           : devices.map(d => {
               const device: any = d
               if (device.schema.schema.title == 'human')
                 return <Circle center={device.position} radius={10} bubble={false} />
-            })}
+            })} */}
         {devices.length == 0
           ? null
           : devices.map(d => {
               const device: any = d
-              if (device.schema.schema.title == 'room')
-                return <Circle center={device.position} radius={device.radius} bubble={false} />
+              if (device.schema.schema.title == 'Room') {
+                // console.log(device)
+                let r = 0
+                if (Object.keys(device.data).find(k => k == 'radius') && device.data.radius != undefined) {
+                  // console.log(device.data.radius)
+                  r = device.data.radius
+
+                  return <Circle style={{ fillOpacity: '0.3' }} center={device.position} radius={r} bubble={false} />
+                }
+              }
             })}
         {/* <InfoWindow
           position={infoWindow.position}

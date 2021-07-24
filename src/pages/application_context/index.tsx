@@ -80,7 +80,7 @@ export default function () {
           type="primary"
           onClick={() => {
             const APName = record.title + '-' + Math.random().toString(16).substr(2, 8)
-            console.log(APName)
+            // const APName = record.title + '-0e0a1ff5'
             setVisible(false)
             ApplicationContextRQ.create(APName).then(u => {
               message.success('创建成功', 0.5)
