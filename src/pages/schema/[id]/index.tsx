@@ -3,7 +3,9 @@ import { Card, Tooltip, message } from 'antd'
 import { Input, Switch } from '@material-ui/core'
 import MonacoEditor from 'react-monaco-editor'
 import { Icon, Page, XForm } from '@/components'
-import { SchemaRQ } from '@/requests'
+import { SchemaRQ, DeviceRQ } from '@/requests'
+import { AddTitle } from '@/utils'
+import { history } from 'umi'
 import './index.less'
 
 export default function ({
@@ -47,11 +49,21 @@ export default function ({
   function editorChangeHandler(text: string) {
     try {
       const result = JSON.parse(text)
+      let { properties } = result
+      properties = AddTitle({ ...properties })
+      result.properties = properties
       setContent(result)
     } catch (error) {
     } finally {
       setEditorText(text)
     }
+  }
+
+  function createDocument() {
+    DeviceRQ.createFromSchema(schema).then(({ udoi }) => {
+      message.success('创建成功', 0.5)
+      history.push('/device/' + udoi)
+    })
   }
 
   return (
@@ -68,6 +80,9 @@ export default function ({
             </Tooltip>
             <Tooltip overlay="保存">
               <Icon type="icon-store" onClick={updateSchema} />
+            </Tooltip>
+            <Tooltip overlay="以此类型创建">
+              <Icon type="icon-create" onClick={createDocument} />
             </Tooltip>
           </>
         }

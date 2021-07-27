@@ -1,6 +1,6 @@
 import axios from 'axios'
 import dayjs from 'dayjs'
-import { getRequest, getReponse, Encrypt, Decrypt } from '@/utils'
+import { getRequest, getReponse, Encrypt, Decrypt, AddTitle } from '@/utils'
 
 export default {
   async getAll(schemas: any[]) {
@@ -53,7 +53,35 @@ export default {
     return data
   },
 
-  async create(schema: any, createType: string, url: string) {
+  async createFromSchema(schema: any) {
+    const {
+      schema: { title, properties },
+      id,
+    } = schema
+
+    const query = `
+      {
+        new${title}(
+          content: {
+          }
+          udoTypeId: "${id}"
+        ){
+          udoi
+        }
+      }
+    `
+
+    const { data: res } = await axios.post('/api/documents/query', query, {
+      headers: {
+        'Content-Type': 'text/plain',
+      },
+    })
+
+    const data = res['new' + title]
+    return data
+  },
+
+  async createFromUrlAndSchema(schema: any, createType: string, url: string) {
     console.log(schema, createType, url)
     const {
       schema: { title, properties },
@@ -84,7 +112,13 @@ export default {
     return data
   },
 
-  async createFromUrl(uri: string, name: string, location: string, avatarUrl: string, uriType: string = 'HTTP') {
+  async inferAndCreateFromUrl(
+    uri: string,
+    name: string,
+    location: string,
+    avatarUrl: string,
+    uriType: string = 'HTTP'
+  ) {
     console.log(uri, name, location, avatarUrl, uriType)
     const encode = Encrypt(avatarUrl)
     console.log('encode', encode)
@@ -106,7 +140,14 @@ export default {
   },
 
   async getById(id: string) {
-    const { data } = await axios.get('/api/documents/' + id)
+    let { data } = await axios.get('/api/documents/' + id)
+    let {
+      type: {
+        schema: { properties },
+      },
+    } = data
+    properties = AddTitle({ ...properties })
+    data.type.schema.properties = properties
     console.log(data)
     return data
   },

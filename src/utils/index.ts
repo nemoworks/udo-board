@@ -1,3 +1,4 @@
+import property from '@/pages/property'
 import { DeviceRQ } from '@/requests'
 
 type ColumnDifinition = [string, string, Function, number] | [string, string, Function] | [string, string]
@@ -95,4 +96,21 @@ function Encrypt(word) {
   return encrypted.ciphertext.toString().toUpperCase()
 }
 
-export { generateColumns, getLocation, getRequest, getReponse, Decrypt, Encrypt }
+function AddTitle(properties: any) {
+  let d: any = { ...properties }
+  for (let key in d) {
+    if (d[key].type != undefined && d[key].type == 'object') {
+      d[key].properties = AddTitle({ ...d[key].properties })
+      d[key] = { title: key, ...d[key] }
+    } else if (
+      d[key].type != undefined &&
+      (d[key].type == 'string' || d[key].type == 'number' || d[key].type == 'bool' || d[key].type == 'Link')
+    ) {
+      d[key] = { title: key, ...d[key] }
+    }
+  }
+
+  return d
+}
+
+export { generateColumns, getLocation, getRequest, getReponse, Decrypt, Encrypt, AddTitle }

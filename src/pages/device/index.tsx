@@ -105,6 +105,8 @@ export default function ({ setLayoutDisplay }) {
   const [createLat, setCreateLat] = useState('0')
   const [value, setValue] = useState(1)
 
+  const [isContainUri, setIsContainUri] = useState(0)
+
   const [diagramModal, setDiagramModal] = useState(false)
   const [diagramSrc, setDiagramSrc] = useState('')
 
@@ -162,48 +164,45 @@ export default function ({ setLayoutDisplay }) {
   useEffect(() => {
     if (location.length != 0) {
       //console.log(location)
-      DeviceRQ.createFromUrl(createUrl, createName, location, createAvatarUrl, gatewayType).then(d => {
+      DeviceRQ.inferAndCreateFromUrl(createUrl, createName, location, createAvatarUrl, gatewayType).then(d => {
         message.success('导入成功', 0.5)
         history.push('/device/' + d.id)
       })
     }
   }, [location])
 
-  function createFromUrl() {
-    if (value == 1) {
-      getLocation(createUrl, setLocation)
-    } else if (value == 0) {
-      DeviceRQ.createFromUrl(createUrl, createName, createLng + ',' + createLat, createAvatarUrl, gatewayType).then(
-        d => {
-          message.success('导入成功', 0.5)
-          history.push('/device/' + d.id)
-        }
-      )
-    }
-    // SchemaRQ.createFromUrl(sourceUrl, schemaName).then(d => {
-    //   message.success('导入成功', 0.5)
-    //   getLocation(sourceUrl, d.id)
-
-    // })
-  }
-
-  function createFromSchema(schema: any) {
-    DeviceRQ.create(schema, gatewayType, createUrl).then(({ udoi }) => {
-      message.success('创建成功', 0.5)
-      history.push('/device/' + udoi)
-    })
-  }
-
   function create() {
     if (createType == 'schema') {
       if (createSchema != '') {
-        // console.log(createSchema, gatewayType)
-        createFromSchema(schemas.find(s => (s.id = createSchema)))
+        const schema: any = schemas.find(s => (s.id = createSchema))
+        if (isContainUri == 1) {
+          DeviceRQ.createFromUrlAndSchema(schema, gatewayType, createUrl).then(({ udoi }) => {
+            message.success('创建成功', 0.5)
+            history.push('/device/' + udoi)
+          })
+        } else if (isContainUri == 0) {
+          DeviceRQ.createFromSchema(schema).then(({ udoi }) => {
+            message.success('创建成功', 0.5)
+            history.push('/device/' + udoi)
+          })
+        }
       }
     } else if (createType == 'url') {
       if (createUrl != '') {
-        // console.log(createUrl, createName, createAvatarUrl, gatewayType)
-        createFromUrl()
+        if (value == 1) {
+          getLocation(createUrl, setLocation)
+        } else if (value == 0) {
+          DeviceRQ.inferAndCreateFromUrl(
+            createUrl,
+            createName,
+            createLng + ',' + createLat,
+            createAvatarUrl,
+            gatewayType
+          ).then(d => {
+            message.success('导入成功', 0.5)
+            history.push('/device/' + d.id)
+          })
+        }
       }
     }
   }
@@ -263,7 +262,160 @@ export default function ({ setLayoutDisplay }) {
                     </Radio.Group>
                   </td>
                 </tr>
-                <tr>
+                {createType == 'url' ? (
+                  <>
+                    <tr>
+                      <td>
+                        <span>协议: </span>
+                      </td>
+                      <td>
+                        <Select style={{ fontSize: 'small' }} value={gatewayType} onChange={t => setGatewayType(t)}>
+                          {['HTTP', 'MQTT'].map(t => (
+                            <Select.Option key={t} value={t}>
+                              {t}
+                            </Select.Option>
+                          ))}
+                        </Select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span>资源地址:</span>
+                      </td>
+                      <td>
+                        <Input value={createUrl} onChange={e => setCreateUrl(e.target.value)}></Input>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span>类型名称:</span>
+                      </td>
+                      <td>
+                        <Input value={createName} onChange={e => setCreateName(e.target.value)}></Input>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span>图标地址:</span>
+                      </td>
+                      <td>
+                        <Input value={createAvatarUrl} onChange={e => setCreateAvatarUrl(e.target.value)}></Input>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span>位置:</span>
+                      </td>
+                      <td>
+                        <Radio.Group
+                          onChange={e => {
+                            setValue(e.target.value)
+                          }}
+                          value={value}
+                        >
+                          <Radio style={{ fontSize: 'small' }} value={1}>
+                            推导
+                          </Radio>
+                          <Radio style={{ fontSize: 'small' }} value={0}>
+                            默认
+                          </Radio>
+                        </Radio.Group>
+                      </td>
+                    </tr>
+                    {value == 0 ? (
+                      <>
+                        <tr>
+                          <td>
+                            <span>经度:</span>
+                          </td>
+                          <td>
+                            <Input value={createLng} onChange={e => setCreateLng(e.target.value)}></Input>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <span>纬度:</span>
+                          </td>
+                          <td>
+                            <Input value={createLat} onChange={e => setCreateLat(e.target.value)}></Input>
+                          </td>
+                        </tr>
+                      </>
+                    ) : null}
+                  </>
+                ) : createType == 'schema' ? (
+                  <>
+                    <tr>
+                      <td>
+                        <span>资源模型:</span>
+                      </td>
+                      <td>
+                        <Select
+                          style={{ width: createSelectLength, fontSize: 'small' }}
+                          value={createSchema}
+                          onChange={s => {
+                            setCreateSchema(s)
+                            setCreateSelectLength('auto')
+                          }}
+                        >
+                          {schemas.map(s => (
+                            <Select.Option key={s.id} value={s.id}>
+                              {s.schema.title + '/' + s.id}
+                            </Select.Option>
+                          ))}
+                        </Select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span>资源地址: </span>
+                      </td>
+                      <td>
+                        <Radio.Group
+                          onChange={e => {
+                            setIsContainUri(e.target.value)
+                          }}
+                          value={isContainUri}
+                        >
+                          <Radio style={{ fontSize: 'small' }} value={1}>
+                            包含
+                          </Radio>
+                          <Radio style={{ fontSize: 'small' }} value={0}>
+                            不包含
+                          </Radio>
+                        </Radio.Group>
+                      </td>
+                    </tr>
+                    {isContainUri == 1 ? (
+                      <>
+                        <tr>
+                          <td>
+                            <span>协议: </span>
+                          </td>
+                          <td>
+                            <Select style={{ fontSize: 'small' }} value={gatewayType} onChange={t => setGatewayType(t)}>
+                              {['HTTP', 'MQTT'].map(t => (
+                                <Select.Option key={t} value={t}>
+                                  {t}
+                                </Select.Option>
+                              ))}
+                            </Select>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <span>资源地址:</span>
+                          </td>
+                          <td>
+                            <Input value={createUrl} onChange={e => setCreateUrl(e.target.value)}></Input>
+                          </td>
+                        </tr>
+                      </>
+                    ) : null}
+                  </>
+                ) : null}
+
+                {/* <tr>
                   <td>
                     <span>协议: </span>
                   </td>
@@ -276,8 +428,8 @@ export default function ({ setLayoutDisplay }) {
                       ))}
                     </Select>
                   </td>
-                </tr>
-                {createType == 'schema' ? (
+                </tr> */}
+                {/* {createType == 'schema' ? (
                   <tr>
                     <td>
                       <span>资源模型:</span>
@@ -299,8 +451,8 @@ export default function ({ setLayoutDisplay }) {
                       </Select>
                     </td>
                   </tr>
-                ) : null}
-                {createType == 'url' ? (
+                ) : null} */}
+                {/* {createType == 'url' ? (
                   <>
                     <tr>
                       <td>
@@ -319,16 +471,16 @@ export default function ({ setLayoutDisplay }) {
                       </td>
                     </tr>
                   </>
-                ) : null}
-                <tr>
+                ) : null} */}
+                {/* <tr>
                   <td>
                     <span>资源地址:</span>
                   </td>
                   <td>
                     <Input value={createUrl} onChange={e => setCreateUrl(e.target.value)}></Input>
                   </td>
-                </tr>
-                <tr>
+                </tr> */}
+                {/* <tr>
                   <td>
                     <span>位置:</span>
                   </td>
@@ -347,8 +499,8 @@ export default function ({ setLayoutDisplay }) {
                       </Radio>
                     </Radio.Group>
                   </td>
-                </tr>
-                {value == 0 ? (
+                </tr> */}
+                {/* {value == 0 ? (
                   <>
                     <tr>
                       <td>
@@ -367,7 +519,7 @@ export default function ({ setLayoutDisplay }) {
                       </td>
                     </tr>
                   </>
-                ) : null}
+                ) : null} */}
               </table>
             </Modal>
 
