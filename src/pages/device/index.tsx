@@ -214,7 +214,7 @@ export default function ({ setLayoutDisplay }) {
         bordered={true}
         title={
           <>
-            <span className="text">资源</span>
+            <span className="text">平台概览</span>
             {/* <Input value={searchText} onChange={e => setSearchText(e.target.value)} /> */}
           </>
         }
