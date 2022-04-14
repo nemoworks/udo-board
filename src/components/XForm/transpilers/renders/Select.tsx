@@ -1,5 +1,5 @@
 import { Select } from 'antd'
-import { aggregatedOperation as Do } from '@x-form/react'
+import { aggregatedOperation as Do } from '@x-form-legacy/react'
 
 const { Option } = Select
 

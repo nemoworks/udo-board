@@ -1,4 +1,4 @@
-import { TranspilerFactory } from '@x-form/react-jsonschema'
+import { TranspilerFactory } from '@x-form-legacy/react-jsonschema'
 import Generators from './generators'
 import Injectors from './injectors'
 

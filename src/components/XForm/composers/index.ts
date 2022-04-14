@@ -1,3 +1,3 @@
-import { ComposerFactory } from '@x-form/react-jsonschema'
+import { ComposerFactory } from '@x-form-legacy/react-jsonschema'
 
 export default ComposerFactory({})

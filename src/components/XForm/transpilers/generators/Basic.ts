@@ -1,4 +1,4 @@
-import { __render__ } from '@x-form/react-jsonschema'
+import { __render__ } from '@x-form-legacy/react-jsonschema'
 import renders from '../renders'
 
 const { Select, Input, DatePicker, Link, Checkbox } = renders

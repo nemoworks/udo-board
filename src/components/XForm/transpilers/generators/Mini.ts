@@ -1,4 +1,4 @@
-import { __render__ } from '@x-form/react-jsonschema'
+import { __render__ } from '@x-form-legacy/react-jsonschema'
 import renders, { __label__, __depth__ } from '../renders'
 
 const { Options, List, Card, Divider, Label } = renders

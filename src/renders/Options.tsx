@@ -1,6 +1,6 @@
 import { Button } from 'antd'
 import { PlusOutlined, CloseOutlined } from '@ant-design/icons'
-import { aggregatedOperation as Do, __fragment__ } from '@x-form/react'
+import { aggregatedOperation as Do, __fragment__ } from '@x-form-legacy/react'
 
 function Options({ schema, children }) {
   const { items, initializeText } = schema

@@ -1,5 +1,5 @@
 // import { useEffect, useState } from 'react'
-// import XForm, { Do } from '@x-form/react-jsonschema'
+// import XForm, { Do } from '@x-form-legacy/react-jsonschema'
 // import { Select, Popover } from 'antd'
 // import { SchemaRQ, DocumentRQ } from '@/requests'
 // import { Form } from '@/components'

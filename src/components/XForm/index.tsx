@@ -1,4 +1,4 @@
-import XForm from '@x-form/react-jsonschema'
+import XForm from '@x-form-legacy/react-jsonschema'
 import transpilers from './transpilers'
 
 const Default = {
