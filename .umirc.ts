@@ -9,6 +9,10 @@ export default defineConfig({
       },
     ])
   },
+  hash: true,
+  history: {
+    type: 'hash',
+  },
   nodeModulesTransform: {
     type: 'none',
   },
@@ -18,7 +22,7 @@ export default defineConfig({
   antd: {},
   proxy: {
     '/api': {
-      target: 'http://192.168.28.92:8080',
+      target: 'http://localhost:8080',
       changeOrigin: true,
     },
     '/dns': {
